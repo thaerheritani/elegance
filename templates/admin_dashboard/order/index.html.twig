@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	{% include 'shared/nav.html.twig' %}
+
+	<div class="container mt-5">
+		<h2>Gestion des commandes</h2>
+
+		<table class="table">
+			<thead>
+			<tr>
+				<th>ID</th>
+				<th>Date</th>
+				<th>Total</th>
+				<th>Client</th>
+				<th>Statut</th>
+				<th>Actions</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for order in orders %}
+				<tr>
+					<td>{{ order.id }}</td>
+					<td>{{ order.orderDate|date('d/m/Y') }}</td>
+					<td>{{ order.total }} €</td>
+					<td>{{ order.customer.email }}</td>
+					<td>{{ order.status }}</td>
+					<td>
+						<a href="{{ path('admin_order_status', {id: order.id}) }}" class="btn btn-primary btn-sm">Modifier statut</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="6">Aucune commande trouvée</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

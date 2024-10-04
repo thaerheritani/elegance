@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un Produit{% endblock %}
+
+{% block body %}
+    {% include 'shared/nav.html.twig' %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Ajouter un nouveau produit</h1>
+
+        {{ form_start(productForm, {'attr': {'class': 'needs-validation', 'novalidate': true}}) }}
+
+        <!-- Nom du produit -->
+        <div class="form-group mb-3">
+            {{ form_label(productForm.name, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(productForm.name, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(productForm.name) }}
+        </div>
+
+        <!-- Description du produit -->
+        <div class="form-group mb-3">
+            {{ form_label(productForm.description, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(productForm.description, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(productForm.description) }}
+        </div>
+
+        <!-- Prix du produit -->
+        <div class="form-group mb-3">
+            {{ form_label(productForm.price, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(productForm.price, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(productForm.price) }}
+        </div>
+
+        <!-- Stock du produit -->
+        <div class="form-group mb-3">
+            {{ form_label(productForm.stock, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(productForm.stock, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(productForm.stock) }}
+        </div>
+
+        <!-- Catégorie du produit -->
+        <div class="form-group mb-3">
+            {{ form_label(productForm.category, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(productForm.category, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(productForm.category) }}
+        </div>
+
+        <!-- Taille du produit -->
+        <div class="form-group mb-3">
+            {{ form_label(productForm.size, null, {'label_attr': {'class': 'form-label'}}) }}
+            <div class="form-check-group">
+                {% for child in productForm.size %}
+                    <div class="form-check form-check-inline mb-2">
+                        {{ form_widget(child, {'attr': {'class': 'form-check-input'}}) }}
+                        {{ form_label(child, null, {'label_attr': {'class': 'form-check-label ms-2'}}) }}
+                    </div>
+                {% endfor %}
+            </div>
+            {{ form_errors(productForm.size) }}
+        </div>
+
+
+        <!-- Ajout des photos -->
+        <div class="form-group">
+            <label class="form-label">Photos</label>
+            <div id="photos-container" data-prototype="{{ form_widget(productForm.photos.vars.prototype)|e('html_attr') }}">
+                {% for photoForm in productForm.photos %}
+                    <div class="mb-3 photo-entry">
+                        {{ form_row(photoForm.imageFile, {'attr': {'class': 'form-control'}}) }}
+                        <button type="button" class="btn btn-danger remove-photo mt-2">Supprimer</button>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" id="add-photo-button" class="btn btn-success mt-3">Ajouter une photo</button>
+        </div>
+
+        <!-- Bouton d'enregistrement -->
+        <button type="submit" class="btn btn-primary mt-3">Enregistrer</button>
+
+        {{ form_end(productForm) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const photosContainer = document.getElementById('photos-container');
+            const addPhotoButton = document.getElementById('add-photo-button');
+
+            addPhotoButton.addEventListener('click', function() {
+                const prototype = photosContainer.dataset.prototype;
+                const index = photosContainer.querySelectorAll('.photo-entry').length;
+                const newForm = prototype.replace(/__name__/g, index);
+                const newFormElement = document.createElement('div');
+                newFormElement.classList.add('mb-3', 'photo-entry');
+                newFormElement.innerHTML = newForm + '<button type="button" class="btn btn-danger remove-photo">Supprimer</button>';
+                photosContainer.appendChild(newFormElement);
+                addRemoveButtonListener(newFormElement.querySelector('.remove-photo'));
+            });
+
+            function addRemoveButtonListener(button) {
+                button.addEventListener('click', function() {
+                    button.parentElement.remove();
+                });
+            }
+
+            // Ajouter l'écouteur pour les boutons existants
+            document.querySelectorAll('.remove-photo').forEach(function(button) {
+                addRemoveButtonListener(button);
+            });
+        });
+
+    </script>
+    {% include 'shared/footer.html.twig' %}
+
+{% endblock %}

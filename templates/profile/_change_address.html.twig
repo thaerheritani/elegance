@@ -1,0 +1,32 @@
+{% extends 'profile/index.html.twig' %}
+
+{% block profile_content %}
+	<h3>{{ 'Changer l\'adresse'|trans }}</h3>
+	{{ form_start(changeAddressForm) }}
+	<div class="form-group">
+		{{ form_label(changeAddressForm.street) }}
+		{{ form_widget(changeAddressForm.street, {'attr': {'class': 'form-control'}}) }}
+		{{ form_errors(changeAddressForm.street) }}
+	</div>
+
+	<div class="form-group">
+		{{ form_label(changeAddressForm.city) }}
+		{{ form_widget(changeAddressForm.city, {'attr': {'class': 'form-control'}}) }}
+		{{ form_errors(changeAddressForm.city) }}
+	</div>
+
+	<div class="form-group">
+		{{ form_label(changeAddressForm.postalCode) }}
+		{{ form_widget(changeAddressForm.postalCode, {'attr': {'class': 'form-control'}}) }}
+		{{ form_errors(changeAddressForm.postalCode) }}
+	</div>
+
+	<div class="form-group">
+		{{ form_label(changeAddressForm.country) }}
+		{{ form_widget(changeAddressForm.country, {'attr': {'class': 'form-control'}}) }}
+		{{ form_errors(changeAddressForm.country) }}
+	</div>
+
+	<button type="submit" class="btn btn-primary mt-3">{{ 'Changer l\'adresse'|trans }}</button>
+	{{ form_end(changeAddressForm) }}
+{% endblock %}

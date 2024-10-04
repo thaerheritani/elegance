@@ -1,16 +1,23 @@
-# see https://symfony.com/doc/current/reference/configuration/framework.html
+# config/packages/framework.yaml
 framework:
     secret: '%env(APP_SECRET)%'
-    #csrf_protection: true
 
-    # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    # Locale par défaut
+    default_locale: en
 
-    #esi: true
-    #fragments: true
+    # Configuration du traducteur
+    translator:
+        default_path: '%kernel.project_dir%/translations'
+        fallbacks:
+            - en
 
-when@test:
-    framework:
-        test: true
-        session:
-            storage_factory_id: session.storage.factory.mock_file
+    # Session configuration
+    session:
+        handler_id: null
+        cookie_secure: auto
+        cookie_samesite: lax
+
+    # Cache et routing
+    router:
+        utf8: true
+        strict_requirements: null

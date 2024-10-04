@@ -1,0 +1,17 @@
+<h3>{{ 'Informations générales'|trans }}</h3>
+<p><strong>{{ 'Nom complet'|trans }}:</strong> {{ app.user.firstName }} {{ app.user.lastName }}</p>
+<p><strong>{{ 'E-mail'|trans }}:</strong> {{ app.user.email }}</p>
+<p><strong>{{ 'Date de naissance'|trans }}:</strong> {{ app.user.dateOfBirth|date('d/m/Y') }}</p>
+
+<h4>{{ 'Adresses'|trans }}</h4>
+{% if app.user.addresses is not empty %}
+	<ul>
+		{% for address in app.user.addresses %}
+			<li>
+				{{ address.street }}, {{ address.city }}, {{ address.postalCode }}, {{ address.country }}
+			</li>
+		{% endfor %}
+	</ul>
+{% else %}
+	<p>{{ 'Aucune adresse enregistrée'|trans }}</p>
+{% endif %}

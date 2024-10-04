@@ -1,0 +1,42 @@
+# Inschrijvings- en inlogformulieren
+registration:
+  title: "Inschrijving"
+  first_name: "Voornaam"
+  last_name: "Achternaam"
+  email: "E-mail"
+  password: "Wachtwoord"
+  date_of_birth: "Geboortedatum"
+  agree_terms: "Akkoord met de voorwaarden"
+  submit: "Inschrijven"
+
+# Productpagina
+product:
+  title: "Producten"
+  price: "Prijs"
+  add_to_cart: "Aan winkelwagen toevoegen"
+  size: "Maat"
+  reviews: "Klantbeoordelingen"
+  no_reviews: "Nog geen beoordelingen voor dit product."
+  submit_review: "Beoordeling versturen"
+
+# Winkelwagenpagina
+cart:
+  title: "Uw winkelwagen"
+  product: "Producten"
+  total: "Totaal"
+  shipping_cost: "Verzendkosten"
+  empty_cart: "Uw winkelwagen is leeg."
+  validate_order: "Ga verder met afrekenen"
+  remove_item: "Verwijderen"
+  qty: "Aantal"
+  in_stock: "Op voorraad"
+  free_shipping: "In aanmerking voor GRATIS verzending"
+  price_total: "Totaalprijs"
+
+# Acties
+actions:
+  edit: "Bewerken"
+  delete: "Verwijderen"
+  back_to_list: "Terug naar de lijst"
+  create_new: "Product toevoegen"
+  confirm_delete: "Weet u zeker dat u dit item wilt verwijderen?"

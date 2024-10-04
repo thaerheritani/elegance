@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des messages{% endblock %}
+
+{% block body %}
+    {% include 'shared/nav.html.twig' %}
+
+    <div class="container mt-5">
+        <h1>Liste des messages</h1>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for message in messages %}
+                <tr>
+                    <td>{{ message.id }}</td>
+                    <td>{{ message.name }}</td>
+                    <td>{{ message.email }}</td>
+                    <td>{{ message.content }}</td>
+                    <td>
+                        {% if message.isAnswered %}
+                            <span class="badge bg-success">Répondu</span>
+                        {% else %}
+                            <span class="badge bg-warning">Non répondu</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_message_reply', {id: message.id}) }}" class="btn btn-primary">Répondre</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

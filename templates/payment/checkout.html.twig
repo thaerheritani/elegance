@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container mt-5">
+		<h2 class="mb-4">Paiement sécurisé</h2>
+
+		<div class="row">
+			<div class="col-lg-6 offset-lg-3">
+				<div class="card p-4">
+					<h4 class="mb-3">Montant à payer : {{ total }} €</h4>
+
+					<form id="payment-form">
+						<div class="mb-3">
+							<div id="card-element"><!-- Stripe Card Element sera inséré ici --></div>
+						</div>
+						<div id="card-errors" class="text-danger mb-3" role="alert"></div>
+						<button id="submit" class="btn btn-primary w-100 mt-3">Payer</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script src="https://js.stripe.com/v3/"></script>
+	<script>
+        // Initialiser Stripe avec votre clé publique
+        const stripe = Stripe('{{ stripe_public_key }}');
+        const elements = stripe.elements();
+
+        // Créer un élément de carte pour afficher le champ de saisie de carte
+        const cardElement = elements.create('card');
+        cardElement.mount('#card-element');
+
+        // Gestion du formulaire de paiement
+        const form = document.getElementById('payment-form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            // Validation de la carte via Stripe
+            const {error, paymentMethod} = await stripe.createPaymentMethod({
+                type: 'card',
+                card: cardElement,
+            });
+
+            if (error) {
+                // Afficher les erreurs
+                const errorElement = document.getElementById('card-errors');
+                errorElement.textContent = error.message;
+            } else {
+                // Récupérer le client_secret du PaymentIntent
+                const clientSecret = '{{ client_secret }}';
+
+                // Confirmer le paiement
+                stripe.confirmCardPayment(clientSecret, {
+                    payment_method: paymentMethod.id
+                }).then(function(result) {
+                    if (result.error) {
+                        // Afficher l'erreur de paiement
+                        const errorElement = document.getElementById('card-errors');
+                        errorElement.textContent = result.error.message;
+                    } else {
+                        // Paiement réussi
+                        window.location.href = "{{ path('success_url') }}";
+                    }
+                });
+            }
+        });
+	</script>
+{% endblock %}

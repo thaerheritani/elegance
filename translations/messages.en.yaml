@@ -1,0 +1,42 @@
+# Registration and login forms
+registration:
+  title: "Sign Up"
+  first_name: "First Name"
+  last_name: "Last Name"
+  email: "Email"
+  password: "Password"
+  date_of_birth: "Date of Birth"
+  agree_terms: "Agree to Terms"
+  submit: "Register"
+
+# Product page
+product:
+  title: "Products"
+  price: "Price"
+  add_to_cart: "Add to Cart"
+  size: "Size"
+  reviews: "Customer Reviews"
+  no_reviews: "No reviews for this product yet."
+  submit_review: "Submit a Review"
+
+# Cart page
+cart:
+  title: "Your Cart"
+  product: "Products"
+  total: "Total"
+  shipping_cost: "Shipping"
+  empty_cart: "Your cart is empty."
+  validate_order: "Proceed to Checkout"
+  remove_item: "Remove"
+  qty: "Qty"
+  in_stock: "In stock"
+  free_shipping: "Eligible for FREE Shipping"
+  price_total: "Total Price"
+
+# Actions
+actions:
+  edit: "Edit"
+  delete: "Delete"
+  back_to_list: "Back to List"
+  create_new: "Add a Product"
+  confirm_delete: "Are you sure you want to delete this item?"

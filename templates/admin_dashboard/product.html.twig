@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les Produits{% endblock %}
+
+{% block body %}
+	{% include 'shared/nav.html.twig' %}
+	<div class="container mt-5">
+		<h1>Gérer les Produits</h1>
+		<a href="{{ path('admin_product_new') }}" class="btn btn-primary mb-3">Créer un nouveau produit</a>
+
+		<table class="table">
+			<thead>
+			<tr>
+				<th>ID</th>
+				<th>Nom</th>
+				<th>Prix</th>
+				<th>Stock</th>
+				<th>Discount</th>
+				<th>Actions</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for product in products %}
+				<tr>
+					<td>{{ product.id }}</td>
+					<td>{{ product.name }}</td>
+					<td>{{ product.price }} €</td>
+					<td>{{ product.stock }}</td>
+					<td>{{ product.discount }} %</td>
+					<td>
+						<a href="{{ path('admin_product_show', {id: product.id}) }}" class="btn btn-info">Voir</a>
+						<a href="{{ path('admin_product_edit', {id: product.id}) }}" class="btn btn-warning">Modifier</a>
+						<form method="post" action="{{ path('admin_product_delete', {id: product.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr ?');">
+							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+							<button class="btn btn-danger">Supprimer</button>
+						</form>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{% include 'shared/footer.html.twig' %}
+
+{% endblock %}

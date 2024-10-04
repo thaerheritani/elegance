@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Répondre au message{% endblock %}
+
+{% block body %}
+	{% include 'shared/nav.html.twig' %}
+
+	<div class="container mt-5">
+		<h1>Répondre à {{ message.name }}</h1>
+
+		<form method="post">
+			<div class="mb-3">
+				<label for="reply" class="form-label">Réponse</label>
+				<textarea id="reply" name="reply" class="form-control" rows="5"></textarea>
+			</div>
+			<button type="submit" class="btn btn-primary">Envoyer</button>
+		</form>
+
+		<a href="{{ path('admin_message_index') }}" class="btn btn-secondary mt-3">Retour</a>
+	</div>
+{% endblock %}

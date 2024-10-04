@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block body %}
+    {% include 'shared/nav.html.twig' %}
+    <div class="container mt-5">
+        <h1>Tableau de bord Admin</h1>
+        <p>Bienvenue dans le panneau de contrôle d'administration.</p>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Utilisateurs</h5>
+                        <p class="card-text">Nombre total d'utilisateurs : {{ userCount }}</p>
+                        <a href="{{ path('admin_manage_users') }}" class="btn btn-primary">Gérer les utilisateurs</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Produits</h5>
+                        <p class="card-text">Nombre total de produits : {{ productCount }}</p>
+                        <a href="{{ path('admin_manage_products') }}" class="btn btn-primary">Gérer les produits</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Commandes</h5>
+                        <a href="{{ path('admin_manage_orders') }}" class="btn btn-primary">Gérer les commandes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Messages clients</h5>
+                        <p class="card-text">Voir et répondre aux messages clients</p>
+                        <a href="{{ path('admin_message_index') }}" class="btn btn-primary">Gérer les messages</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'shared/footer.html.twig' %}
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les commandes{% endblock %}
+
+{% block body %}
+	{% include 'shared/nav.html.twig' %}
+	<div class="container mt-5">
+		<h1>Gérer les commandes</h1>
+		<table class="table">
+			<thead>
+			<tr>
+				<th>ID</th>
+				<th>Date</th>
+				<th>Total</th>
+				<th>Statut</th>
+				<th>Actions</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for order in orders %}
+				<tr>
+					<td>{{ order.id }}</td>
+					<td>{{ order.orderDate|date('Y-m-d') }}</td>
+					<td>{{ order.total }} €</td>
+					<td>{{ order.status }}</td>
+					<td>
+						<!-- Actions pour gérer la commande (ajouter modifier/supprimer selon le besoin) -->
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{% include 'shared/footer.html.twig' %}
+
+{% endblock %}

@@ -3,3 +3,59 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+_index:
+    path: /{_locale}/
+    controller: App\Controller\DefaultController::index
+    requirements:
+        _locale: en|fr|nl
+
+checkout:
+    path: /checkout
+    controller: App\Controller\PaymentController::checkout
+
+success_url:
+    path: /success
+    controller: App\Controller\PaymentController::success
+
+cancel_url:
+    path: /cancel
+    controller: App\Controller\PaymentController::cancel
+
+admin_dashboard:
+    path: /admin/dashboard
+    controller: App\Controller\AdminDashboardController::index
+
+admin_manage_users:
+    path: /admin/users
+    controller: App\Controller\AdminDashboardController::manageUsers
+
+admin_manage_products:
+    path: /admin/products
+    controller: App\Controller\AdminDashboardController::manageProducts
+
+admin_manage_orders:
+    path: /admin/orders
+    controller: App\Controller\AdminDashboardController::manageOrders
+
+admin_product_index:
+    path: /admin/products
+    controller: App\Controller\AdminDashboardController::read
+
+admin_product_new:
+    path: /admin/products/new
+    controller: App\Controller\AdminDashboardController::new
+
+admin_product_show:
+    path: /admin/products/{id}
+    controller: App\Controller\AdminDashboardController::show
+
+admin_product_edit:
+    path: /admin/products/{id}/edit
+    controller: App\Controller\AdminDashboardController::edit
+
+admin_product_delete:
+    path: /admin/products/{id}/delete
+    controller: App\Controller\AdminDashboardController::delete
+    methods: POST
+

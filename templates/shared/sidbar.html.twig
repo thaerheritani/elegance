@@ -1,0 +1,104 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 100%;">
+	<h4>{{ 'Filter by'|trans }}</h4>
+	<hr>
+
+	<!-- Categories Filter -->
+	<h5 class="mb-3">{{ 'Categories'|trans }}</h5>
+	<ul class="nav nav-pills flex-column mb-auto">
+		{% for category in categories %}
+			<li class="nav-item">
+				<a href="{{ path('app_product_index', { 'category': category.id }) }}" class="nav-link link-dark">
+					{{ category.name|trans }}
+				</a>
+			</li>
+		{% else %}
+			<li class="nav-item">{{ 'No categories found'|trans }}</li>
+		{% endfor %}
+	</ul>
+
+	<hr>
+
+	<!-- Size Filter -->
+	<h5 class="mb-3">{{ 'Size'|trans }}</h5>
+	<ul class="nav nav-pills flex-column mb-auto">
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'size': 'small' }) }}" class="nav-link link-dark">
+				{{ 'Small'|trans }}
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'size': 'medium' }) }}" class="nav-link link-dark">
+				{{ 'Medium'|trans }}
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'size': 'large' }) }}" class="nav-link link-dark">
+				{{ 'Large'|trans }}
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'size': 'xlarge' }) }}" class="nav-link link-dark">
+				{{ 'Extra Large'|trans }}
+			</a>
+		</li>
+	</ul>
+
+	<hr>
+
+	<!-- Color Filter -->
+	<h5 class="mb-3">{{ 'Color'|trans }}</h5>
+	<ul class="nav nav-pills flex-column mb-auto">
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'color': 'noir' }) }}" class="nav-link link-dark">
+				{{ 'Black'|trans }}
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'color': 'blanc' }) }}" class="nav-link link-dark">
+				{{ 'White'|trans }}
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'color': 'bleu' }) }}" class="nav-link link-dark">
+				{{ 'Blue'|trans }}
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'color': 'rouge' }) }}" class="nav-link link-dark">
+				{{ 'Red'|trans }}
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'color': 'vert' }) }}" class="nav-link link-dark">
+				{{ 'Green'|trans }}
+			</a>
+		</li>
+	</ul>
+
+	<hr>
+
+	<!-- Price Range Filter -->
+	<h5 class="mb-3">{{ 'Price'|trans }}</h5>
+	<ul class="nav nav-pills flex-column mb-auto">
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'range': '0-50' }) }}" class="nav-link link-dark">
+				0€ - 50€
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'range': '50-100' }) }}" class="nav-link link-dark">
+				50€ - 100€
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'range': '100-200' }) }}" class="nav-link link-dark">
+				100€ - 200€
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{{ path('app_product_index', { 'range': '200+' }) }}" class="nav-link link-dark">
+				{{ '200€ and above'|trans }}
+			</a>
+		</li>
+	</ul>
+</div>

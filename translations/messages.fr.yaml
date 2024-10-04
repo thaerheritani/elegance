@@ -1,0 +1,42 @@
+# Formulaires d'inscription et de connexion
+registration:
+  title: "Inscription"
+  first_name: "Prénom"
+  last_name: "Nom"
+  email: "Adresse email"
+  password: "Mot de passe"
+  date_of_birth: "Date de naissance"
+  agree_terms: "Accepter les conditions"
+  submit: "S'inscrire"
+
+# Page produit
+product:
+  title: "Produits"
+  price: "Prix"
+  add_to_cart: "Ajouter au panier"
+  size: "Taille"
+  reviews: "Avis des clients"
+  no_reviews: "Aucun avis pour ce produit pour l'instant."
+  submit_review: "Poster un avis"
+
+# Page panier
+cart:
+  title: "Votre panier"
+  product: "Produits"
+  total: "Total"
+  shipping_cost: "Livraison"
+  empty_cart: "Votre panier est vide."
+  validate_order: "Valider ma commande"
+  remove_item: "Supprimer"
+  qty: "Qté"
+  in_stock: "En stock"
+  free_shipping: "Éligible à la livraison GRATUITE"
+  price_total: "Total des produits"
+
+# Actions
+actions:
+  edit: "Modifier"
+  delete: "Supprimer"
+  back_to_list: "Retour à la liste"
+  create_new: "Ajouter un produit"
+  confirm_delete: "Êtes-vous sûr de vouloir supprimer cet élément ?"

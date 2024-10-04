@@ -1,0 +1,69 @@
+{% block body %}
+	<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="{{ path('app_product_index') }}">
+				<img src="{{ asset('images/logo1.png') }}" alt="MyShop Logo" width="100" height="auto">
+			</a>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_product_index') }}">{{ 'Products'|trans }}</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_cart') }}">
+							<i class="bi bi-cart"></i> Panier <span id="cart-count" class="badge bg-primary">0</span>
+						</a>
+					</li>
+
+					{% if app.user %}
+						<!-- Affichage pour les utilisateurs connectés -->
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="bi bi-person"></i> {{ 'Profile'|trans }}
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<li><a class="dropdown-item" href="{{ path('app_profile_general_info') }}">{{ 'View Profile'|trans }}</a></li>
+								<li><a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a></li>
+							</ul>
+						</li>
+
+						<!-- Lien vers le dashboard admin, visible uniquement pour les admins -->
+						{% if is_granted('ROLE_ADMIN') %}
+							<li class="nav-item">
+								<a class="nav-link" href="{{ path('admin_dashboard') }}">{{ 'Admin Dashboard'|trans }}</a>
+							</li>
+						{% endif %}
+
+					{% else %}
+						<!-- Affichage pour les utilisateurs non connectés -->
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_login') }}">{{ 'Login'|trans }}</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_register') }}">{{ 'Register'|trans }}</a>
+						</li>
+					{% endif %}
+
+					<!-- Formulaire de recherche de catégories -->
+					<li class="nav-item">
+						<form class="d-flex" method="get" action="{{ path('app_category_search') }}">
+							<input class="form-control me-2" type="search" name="query" placeholder="{{ 'Search categories'|trans }}" aria-label="Search">
+							<button class="btn btn-outline-success" type="submit">{{ 'Search'|trans }}</button>
+						</form>
+					</li>
+
+					<!-- Sélecteur de langue -->
+					<li class="nav-item">
+						<form id="language-select-form" method="get" action="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge(app.request.attributes.get('_route_params'))) }}">
+							<select class="form-select" name="_locale" id="language-select" onchange="this.form.submit()">
+								<option value="fr" {% if app.request.locale == 'fr' %}selected{% endif %}>FR</option>
+								<option value="en" {% if app.request.locale == 'en' %}selected{% endif %}>EN</option>
+								<option value="nl" {% if app.request.locale == 'nl' %}selected{% endif %}>NL</option>
+							</select>
+						</form>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+{% endblock %}

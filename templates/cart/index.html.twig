@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% include 'shared/nav.html.twig' %}
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Votre panier</h2>
+        <div class="row">
+            <div class="col-lg-9">
+                {% for item in cartItems %}
+                    <div class="cart-item d-flex align-items-start mb-4 p-3 border-bottom">
+                        <img src="{{ asset('images/products/' ~ item.image) }}" alt="{{ item.name }}" class="img-fluid" style="max-width: 150px;">
+                        <div class="item-info d-flex flex-column flex-grow-1 ms-3">
+                            <h5 class="mb-2">{{ item.name }}</h5>
+                            <span class="text-success">En stock</span>
+                            <div class="d-flex align-items-center mt-3">
+                                <label for="quantity-{{ item.id }}" class="me-2">Qté:</label>
+                                <select id="quantity-{{ item.id }}" class="form-select me-3 w-auto quantity-input" data-id="{{ item.id }}" data-price="{{ item.price }}">
+                                    {% for i in 1..10 %}
+                                        <option value="{{ i }}" {% if item.quantity == i %}selected{% endif %}>{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button class="btn btn-danger remove-item" data-id="{{ item.id }}">Supprimer</button>
+                            </div>
+                        </div>
+                        <div class="item-price text-end ms-auto">
+                            <strong id="price-{{ item.id }}">{{ item.price * item.quantity }} €</strong>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="col-lg-3">
+                <div class="cart-summary p-4 bg-light border">
+                    <h4 class="mb-3">Résumé de la commande</h4>
+                    <p class="d-flex justify-content-between">
+                        <span>Produits:</span>
+                        <span id="total-products">{{ totalProducts }}</span> €
+                    </p>
+                    <p class="d-flex justify-content-between">
+                        <span>Livraison:</span>
+                        <span id="shipping-cost">{{ shippingCost }}</span> €
+                    </p>
+                    <hr>
+                    <p class="d-flex justify-content-between fw-bold">
+                        <span>Total:</span>
+                        <span id="total-price">{{ totalPrice }}</span> €
+                    </p>
+                    <form action="{{ path('checkout') }}" method="POST" data-turbo="false">
+                        <div class="card p-4">
+                            <h4 class="mb-3">Adresse de Livraison</h4>
+
+                            {{ form_start(addressForm) }}
+
+                            <div class="mb-3">
+                                {{ form_label(addressForm.street, 'Rue', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(addressForm.street, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form_label(addressForm.city, 'Ville', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(addressForm.city, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form_label(addressForm.postalCode, 'Code Postal', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(addressForm.postalCode, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form_label(addressForm.country, 'Pays', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(addressForm.country, {'attr': {'class': 'form-select'}}) }}
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100 mt-3">Valider ma commande</button>
+
+                            {{ form_end(addressForm) }}
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('turbo:load', function () {
+            // Suppression d'un article du panier
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', function () {
+                    const productId = this.getAttribute('data-id');
+
+                    fetch(`/panier/supprimer/${productId}`, {
+                        method: 'POST',
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    })
+                            .then(response => response.json())
+                            .then(data => {
+                                location.reload();
+                            })
+                            .catch(error => console.error('Erreur lors de la suppression du produit:', error));
+                });
+            });
+
+            // Mise à jour de la quantité d'un article dans le panier
+            document.querySelectorAll('.quantity-input').forEach(select => {
+                select.addEventListener('change', function () {
+                    const productId = this.getAttribute('data-id');
+                    const newQuantity = parseInt(this.value);
+
+                    fetch(`/panier/update/${productId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({ quantity: newQuantity })
+                    })
+                            .then(response => response.json())
+                            .then(data => {
+                                const priceElement = document.getElementById('price-' + productId);
+                                const itemPrice = parseFloat(this.getAttribute('data-price'));
+                                const newTotalPrice = itemPrice * newQuantity;
+
+                                priceElement.textContent = newTotalPrice.toFixed(2) + ' €';
+                                updateTotalPrice();
+                            })
+                            .catch(error => console.error('Erreur lors de la mise à jour de la quantité:', error));
+                });
+            });
+
+            function updateTotalPrice() {
+                let totalProducts = 0;
+
+                document.querySelectorAll('.quantity-input').forEach(select => {
+                    const itemPrice = parseFloat(select.getAttribute('data-price'));
+                    const quantity = parseInt(select.value);
+                    totalProducts += itemPrice * quantity;
+                });
+
+                const shippingCost = parseFloat(document.getElementById('shipping-cost').textContent);
+                document.getElementById('total-products').textContent = totalProducts.toFixed(2);
+                document.getElementById('total-price').textContent = (totalProducts + shippingCost).toFixed(2) + ' €';
+            }
+
+            updateTotalPrice();
+        });
+    </script>
+{% endblock %}

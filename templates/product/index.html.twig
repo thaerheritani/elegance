@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Product index'|trans }}{% endblock %}
+
+{% block body %}
+	{% include 'shared/nav.html.twig' %}
+
+
+	<div class="container mt-5">
+		<div class="row">
+			<!-- Products (70% width) -->
+			<div class="col-lg-12">
+				{% include 'product/_product_list.html.twig' %}
+			</div>
+		</div>
+	</div>
+	{% include 'shared/footer.html.twig' %}
+{% endblock %}
