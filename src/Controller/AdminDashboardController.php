@@ -10,6 +10,7 @@ use App\Form\OrderStatusType;
 use App\Form\ProductType;
 use App\Form\ReviewType;
 use App\Form\UserType;
+use App\Repository\CategoryRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
@@ -24,15 +25,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminDashboardController extends AbstractController
 {
     #[Route('/dashboard', name: 'app_admin_dashboard')]
-    public function index(UserRepository $userRepository, ProductRepository $productRepository): Response
+    public function index(UserRepository $userRepository, ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
     {
         // Récupération des statistiques à afficher dans le tableau de bord
         $userCount = $userRepository->count([]);
         $productCount = $productRepository->count([]);
+        $categoryCount = $categoryRepository->count([]);
+
 
         return $this->render('admin_dashboard/index.html.twig', [
             'userCount' => $userCount,
             'productCount' => $productCount,
+            'categoryCount' => $categoryCount,
+
         ]);
     }
 

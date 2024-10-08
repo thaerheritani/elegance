@@ -3,10 +3,11 @@
 {% block title %}{{ 'my_orders.title'|trans }}{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
+    {% include 'shared/nav.html.twig' %}
+    <div class="container mt-5 pt-5">
         <h1>{{ 'my_orders.title'|trans }}</h1>
 
-        <table class="table">
+        <table class="table ">
             <thead>
             <tr>
                 <th>{{ 'my_orders.order_id'|trans }}</th>
@@ -31,4 +32,6 @@
             </tbody>
         </table>
     </div>
+    {% include 'shared/footer.html.twig' %}
+
 {% endblock %}

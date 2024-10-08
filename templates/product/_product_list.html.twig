@@ -58,7 +58,7 @@
         </div>
 
         <!-- Display of other products -->
-        <h2 class="text-center">{{ 'products.title'|trans }}</h2>
+        <h2 class="text-center">{{ 'product.our_product'|trans }}</h2>
         <div class="row">
             {% for product in productsWithoutDiscount %}
                 <div class="col-md-3 col-sm-6 mb-4">
@@ -109,7 +109,10 @@
 
 
 {% block javascripts %}
-<script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
     document.addEventListener('turbo:load', function () {
         attachCartEvents();
         updateCartCount();

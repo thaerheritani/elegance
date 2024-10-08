@@ -133,3 +133,112 @@ footer h5, footer h3 {
     height: 250px; /* Hauteur fixe pour toutes les images */
     object-fit: cover; /* Recadrer l'image pour remplir la zone sans déformer */
 }
+@media (max-width: 576px) {
+    /* Ajustements pour le mobile */
+    nav.navbar {
+        flex-direction: column;
+    }
+
+    /* Alignement des images et texte au centre */
+    .product-card .card-body {
+        text-align: center;
+    }
+
+    /* Ajustement des images produits */
+    .product-image {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Tailles des boutons */
+    .btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    /* Footer */
+    footer .row {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Ajustements pour les tablettes */
+    .product-card {
+        margin-bottom: 20px;
+    }
+
+    /* Ajustement des colonnes produits */
+    .product-card .col-md-3 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    /* Images dans le slider */
+    .carousel-inner .col-md-3 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    /* Footer */
+    footer .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        text-align: center;
+    }
+}
+@media (max-width: 768px) {
+    /* Ajustements pour les tablettes */
+    .product-card {
+        margin-bottom: 20px;
+    }
+
+    /* Ajustement des colonnes produits */
+    .product-card .col-md-3 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    /* Images dans le slider */
+    .carousel-inner .col-md-3 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    /* Footer */
+    footer .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        text-align: center;
+    }
+}
+@media (max-width: 992px) {
+    /* Colonnes à 3 produits par ligne pour tablettes en orientation paysage */
+    .product-card .col-md-3 {
+        flex: 0 0 33.33%;
+        max-width: 33.33%;
+    }
+
+    /* Images du slider */
+    .carousel-inner .col-md-3 {
+        flex: 0 0 33.33%;
+        max-width: 33.33%;
+    }
+
+    /* Footer */
+    footer .col-md-4 {
+        flex: 0 0 50%;
+        max-width: 50%;
+        text-align: center;
+    }
+}
+@media (max-width: 576px) {
+    h1, h2, h3, h4, h5, h6 {
+        font-size: smaller;
+    }
+
+    .container {
+        padding: 10px;
+    }
+}

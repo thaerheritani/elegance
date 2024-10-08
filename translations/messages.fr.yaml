@@ -7,12 +7,15 @@ admin_dashboard:
   manage_users: "Gérer les utilisateurs"
   products: "Produits"
   total_products: "Nombre total de produits"
+  total_categories: "No"
   manage_products: "Gérer les produits"
   orders: "Commandes"
   manage_orders: "Gérer les commandes"
   messages: "Messages clients"
   manage_messages: "Voir et répondre aux messages clients"
   manage_messages_button: "Gérer les messages"
+  categories: "catégories"
+
 
 
 admin_orders:
@@ -125,6 +128,8 @@ product:
   type: "Type de produit"
   target: "Cible"
   view: "Voir le produit"
+  our_product: "Notre Produits"
+
 
 user:
   edit: "Modifier l'utilisateur"

@@ -7,12 +7,15 @@ admin_dashboard:
   manage_users: "Beheer gebruikers"
   products: "Producten"
   total_products: "Totaal aantal producten"
+  total_categories: "Totaal Category"
   manage_products: "Beheer producten"
   orders: "Bestellingen"
   manage_orders: "Beheer bestellingen"
   messages: "Klantberichten"
   manage_messages: "Bekijk en beantwoord klantberichten"
   manage_messages_button: "Beheer berichten"
+  categories: "categories"
+
 
 
 admin_orders:
@@ -124,6 +127,9 @@ product:
   type: "Product Type"
   target: "Doelgroep"
   view: "Bekijk product"
+  our_product: "Onze producten"
+  add_to_cart: "aan winkelwagen"
+
 
 
 

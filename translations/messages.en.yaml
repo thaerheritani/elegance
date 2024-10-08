@@ -13,6 +13,7 @@ admin_dashboard:
   messages: "Customer Messages"
   manage_messages: "View and reply to customer messages"
   manage_messages_button: "Manage messages"
+  categories: "categories"
 
 admin_orders:
   title: "Manage Orders"
@@ -37,7 +38,7 @@ admin_products:
   confirm_delete: "Are you sure?"
 
 admin_users:
-  title: "Manage Users"
+  title: "create Users"
   id: "ID"
   name: "Name"
   email: "Email"
@@ -124,6 +125,7 @@ product:
   type: "Product Type"
   target: "Target"
   view: "View Product"
+  our_product: "Our Products"
 
 
 
