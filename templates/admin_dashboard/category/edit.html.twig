@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la catégorie{% endblock %}
+
+{% block body %}
+    {% include 'shared/nav.html.twig' %}
+    <div class="container mt-5">
+        <h1>Modifier la catégorie</h1>
+
+        {{ form_start(form) }}
+        <div class="form-group mb-3">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group mb-3">
+            {{ form_label(form.type) }}
+            {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
