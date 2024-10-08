@@ -7,58 +7,60 @@
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav ms-auto">
 					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app_product_index') }}">{{ 'Products'|trans }}</a>
+						<a class="nav-link" href="{{ path('app_product_index') }}">{{ 'navbar.products'|trans }}</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ path('app_cart') }}">
-							<i class="bi bi-cart"></i> Panier <span id="cart-count" class="badge bg-primary">0</span>
+							<i class="bi bi-cart"></i> {{ 'navbar.cart'|trans }} <span id="cart-count" class="badge bg-primary">0</span>
 						</a>
 					</li>
 
 					{% if app.user %}
-						<!-- Affichage pour les utilisateurs connectés -->
+						<!-- Display for logged-in users -->
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								<i class="bi bi-person"></i> {{ 'Profile'|trans }}
+								<i class="bi bi-person"></i> {{ 'navbar.profile'|trans }}
 							</a>
 							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<li><a class="dropdown-item" href="{{ path('app_profile_general_info') }}">{{ 'View Profile'|trans }}</a></li>
-								<li><a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a></li>
+								<li><a class="dropdown-item" href="{{ path('app_profile_general_info') }}">{{ 'navbar.view_profile'|trans }}</a></li>
+								<li><a class="dropdown-item" href="{{ path('app_my_orders') }}">{{ 'navbar.my_orders'|trans }}</a></li>
+								<li><a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'navbar.logout'|trans }}</a></li>
 							</ul>
 						</li>
 
-						<!-- Lien vers le dashboard admin, visible uniquement pour les admins -->
+						<!-- Admin dashboard link for admin users -->
 						{% if is_granted('ROLE_ADMIN') %}
 							<li class="nav-item">
-								<a class="nav-link" href="{{ path('admin_dashboard') }}">{{ 'Admin Dashboard'|trans }}</a>
+								<a class="nav-link" href="{{ path('admin_dashboard') }}">{{ 'navbar.admin_dashboard'|trans }}</a>
 							</li>
 						{% endif %}
 
 					{% else %}
-						<!-- Affichage pour les utilisateurs non connectés -->
+						<!-- Display for non-logged-in users -->
 						<li class="nav-item">
-							<a class="nav-link" href="{{ path('app_login') }}">{{ 'Login'|trans }}</a>
+							<a class="nav-link" href="{{ path('app_login') }}">{{ 'navbar.login'|trans }}</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="{{ path('app_register') }}">{{ 'Register'|trans }}</a>
+							<a class="nav-link" href="{{ path('app_register') }}">{{ 'navbar.register'|trans }}</a>
 						</li>
 					{% endif %}
 
-					<!-- Formulaire de recherche de catégories -->
+					<!-- Category search form -->
 					<li class="nav-item">
-						<form class="d-flex" method="get" action="{{ path('app_category_search') }}">
-							<input class="form-control me-2" type="search" name="query" placeholder="{{ 'Search categories'|trans }}" aria-label="Search">
-							<button class="btn btn-outline-success" type="submit">{{ 'Search'|trans }}</button>
+						<form action="{{ path('app_search') }}" method="get">
+							<button type="submit" class="nav-link">
+								<i class="bi bi-search"></i>
+							</button>
 						</form>
 					</li>
 
-					<!-- Sélecteur de langue -->
+					<!-- Language selector -->
 					<li class="nav-item">
-						<form id="language-select-form" method="get" action="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge(app.request.attributes.get('_route_params'))) }}">
-							<select class="form-select" name="_locale" id="language-select" onchange="this.form.submit()">
-								<option value="fr" {% if app.request.locale == 'fr' %}selected{% endif %}>FR</option>
-								<option value="en" {% if app.request.locale == 'en' %}selected{% endif %}>EN</option>
-								<option value="nl" {% if app.request.locale == 'nl' %}selected{% endif %}>NL</option>
+						<form id="language-select-form" method="get" action="{{ path('change_locale', {'locale': app.request.locale}) }}">
+							<select class="form-select" name="locale" id="language-select" onchange="changeLocale(this.value)">
+								<option value="fr" {% if app.request.locale == 'fr' %}selected{% endif %}>{{ 'navbar.fr'|trans }}</option>
+								<option value="en" {% if app.request.locale == 'en' %}selected{% endif %}>{{ 'navbar.en'|trans }}</option>
+								<option value="nl" {% if app.request.locale == 'nl' %}selected{% endif %}>{{ 'navbar.nl'|trans }}</option>
 							</select>
 						</form>
 					</li>
@@ -66,4 +68,17 @@
 			</div>
 		</div>
 	</nav>
+{% endblock %}
+
+{% block javascripts %}
+
+	<script>
+        function changeLocale(locale) {
+            var url = "{{ path('change_locale', {'locale': 'fr'}) }}";
+            url = url.replace('fr', locale);
+            document.getElementById('language-select-form').action = url;
+            document.getElementById('language-select-form').submit();
+        }
+	</script>
+
 {% endblock %}

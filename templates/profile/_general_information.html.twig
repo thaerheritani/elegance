@@ -1,17 +1,11 @@
-<h3>{{ 'Informations générales'|trans }}</h3>
-<p><strong>{{ 'Nom complet'|trans }}:</strong> {{ app.user.firstName }} {{ app.user.lastName }}</p>
-<p><strong>{{ 'E-mail'|trans }}:</strong> {{ app.user.email }}</p>
-<p><strong>{{ 'Date de naissance'|trans }}:</strong> {{ app.user.dateOfBirth|date('d/m/Y') }}</p>
-
-<h4>{{ 'Adresses'|trans }}</h4>
-{% if app.user.addresses is not empty %}
-	<ul>
-		{% for address in app.user.addresses %}
-			<li>
-				{{ address.street }}, {{ address.city }}, {{ address.postalCode }}, {{ address.country }}
-			</li>
-		{% endfor %}
-	</ul>
-{% else %}
-	<p>{{ 'Aucune adresse enregistrée'|trans }}</p>
-{% endif %}
+<div class="card">
+	<div class="card-header">
+		{{ 'profile.general_info'|trans }}
+	</div>
+	<div class="card-body">
+		<h5 class="card-title">{{ 'profile.personal_info'|trans }}</h5>
+		<p class="card-text"><strong>{{ 'profile.name'|trans }}:</strong> {{ app.user.firstName }} {{ app.user.lastName }}</p>
+		<p class="card-text"><strong>{{ 'profile.email'|trans }}:</strong> {{ app.user.email }}</p>
+		<p class="card-text"><strong>{{ 'profile.dob'|trans }}:</strong> {{ app.user.dateOfBirth|date('Y-m-d') }}</p>
+	</div>
+</div>

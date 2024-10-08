@@ -18,7 +18,7 @@ class ProductCrudController extends AbstractController
     {
         $products = $entityManager->getRepository(Product::class)->findAll();
 
-        return $this->render('admin/product/index.html.twig', [
+        return $this->render('admin/product/new.html.twig', [
             'products' => $products,
         ]);
     }

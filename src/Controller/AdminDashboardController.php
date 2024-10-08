@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Entity\Product;
 use App\Entity\Review;
+use App\Entity\User;
 use App\Form\OrderStatusType;
 use App\Form\ProductType;
 use App\Form\ReviewType;
+use App\Form\UserType;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
@@ -15,6 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/admin')]
@@ -53,6 +56,8 @@ class AdminDashboardController extends AbstractController
         ]);
     }
 
+
+
     #[Route('/orders', name: 'admin_manage_orders')]
     public function manageOrders(OrderRepository $orderRepository): Response
     {
@@ -87,7 +92,7 @@ class AdminDashboardController extends AbstractController
     #[Route('/products', name: 'admin_product_index', methods: ['GET'])]
     public function read(ProductRepository $productRepository): Response
     {
-        return $this->render('admin_dashboard/product/index.html.twig', [
+        return $this->render('admin_dashboard/product/new.html.twig', [
             'products' => $productRepository->findAll(),
         ]);
     }

@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'search.title'|trans }}{% endblock %}
+
+{% block body %}
+    {% include 'shared/nav.html.twig' %}
+
+    <div class="container mt-5">
+        <h2>{{ 'search.title'|trans }}</h2>
+
+        <!-- Formulaire de recherche -->
+        <div class="card p-4 shadow-sm mb-5 bg-white rounded">
+            {{ form_start(searchForm) }}
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(searchForm.productType, 'search.product_type'|trans) }}
+                        {{ form_widget(searchForm.productType, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(searchForm.productType) }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(searchForm.target, 'search.target'|trans) }}
+                        {{ form_widget(searchForm.target, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(searchForm.target) }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(searchForm.size, 'search.size'|trans) }}
+                        {{ form_widget(searchForm.size, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(searchForm.size) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <div class="d-inline-block">
+                    {{ form_widget(searchForm.search, {'attr': {'class': 'btn btn-primary', 'value': 'search.button'|trans}}) }}
+                </div>
+            </div>
+
+            {{ form_end(searchForm) }}
+        </div>
+
+
+        <!-- Affichage des résultats uniquement si la recherche a été soumise -->
+        {% if products is not null %}
+            <h3 class="text-center mt-5">{{ 'search.results'|trans }}</h3>
+            <div class="row g-4 mt-4">
+                {% if products is not empty %}
+                    {% for product in products %}
+                        <div class="col-md-3">
+                            <div class="card h-100 shadow-sm">
+                                <img src="{{ asset('images/products/' ~ (product.photos[0].photoPath ?? 'default.png')) }}" class="card-img-top img-fluid product-image" alt="{{ product.name }}">
+                                <div class="card-body">
+                                    <h5 class="card-title text-truncate">{{ product.name }}</h5>
+                                    <p class="card-text text-muted">{{ product.description|slice(0, 100) ~ '...' }}</p>
+                                    <p class="fw-bold">{{ product.getFinalPrice() }} €</p>
+                                    <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-outline-primary w-100">{{ 'search.view_product'|trans }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center">{{ 'search.no_results'|trans }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    {% include 'shared/footer.html.twig' %}
+
+{% endblock %}

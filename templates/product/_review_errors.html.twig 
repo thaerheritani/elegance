@@ -1,7 +1,0 @@
-{% if reviewForm.vars.errors is not empty %}
-    <ul class="alert alert-danger">
-        {% for error in reviewForm.vars.errors %}
-            <li>{{ error.message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}

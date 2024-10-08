@@ -72,6 +72,14 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
+    // Nouvelle catégorie pour le type de produit (par exemple pantalon, chaussures)
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    private ?Category $type = null;
+
+    // Nouvelle catégorie pour la cible du produit (par exemple hommes, femmes, enfants)
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    private ?Category $targetAudience = null;
+
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
@@ -79,6 +87,41 @@ class Product
         $this->photos = new ArrayCollection();
         $this->size = new ArrayCollection();
     }
+
+    /**
+     * @return Category|null
+     */
+    public function getType(): ?Category
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param Category|null $type
+     */
+    public function setType(?Category $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return Category|null
+     */
+    public function getTargetAudience(): ?Category
+    {
+        return $this->targetAudience;
+    }
+
+    /**
+     * @param Category|null $targetAudience
+     */
+    public function setTargetAudience(?Category $targetAudience): void
+    {
+        $this->targetAudience = $targetAudience;
+    }
+
+
+
 
     /**
      * @return float|null

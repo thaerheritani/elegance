@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paiement annulé{% endblock %}
+{% block title %}{{ 'payment.canceled_title'|trans }}{% endblock %}
 
 {% block body %}
 	<div class="container mt-5 text-center">
-		<h1>Paiement annulé</h1>
-		<p>Votre paiement a été annulé. Vous pouvez réessayer plus tard.</p>
-		<a href="{{ path('app_product_index') }}" class="btn btn-primary mt-3">Retour à la boutique</a>
+		<h1>{{ 'payment.canceled_title'|trans }}</h1>
+		<p>{{ 'payment.canceled_message'|trans }}</p>
+		<a href="{{ path('app_product_index') }}" class="btn btn-primary mt-3">{{ 'payment.return_to_shop'|trans }}</a>
 	</div>
 {% endblock %}

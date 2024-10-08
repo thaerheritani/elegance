@@ -14,7 +14,7 @@ class OrderCrudController extends AbstractController
     #[Route('/', name: 'admin_manage_orders', methods: ['GET'])]
     public function index(OrderRepository $orderRepository): Response
     {
-        return $this->render('admin/order/index.html.twig', [
+        return $this->render('admin/order/new.html.twig', [
             'orders' => $orderRepository->findAll(),
         ]);
     }

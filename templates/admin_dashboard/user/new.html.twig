@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'admin_users.add_user'|trans }}{% endblock %}
+
+{% block body %}
+	{% include 'shared/nav.html.twig' %}
+
+	<div class="container mt-5">
+		<h1>{{ 'admin_users.add_user'|trans }}</h1>
+
+		{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': true}}) }}
+
+		<!-- Prénom -->
+		<div class="form-group mb-3">
+			{{ form_label(form.firstName, 'admin_users.first_name'|trans, {'label_attr': {'class': 'form-label'}}) }}
+			{{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.firstName) }}
+		</div>
+
+		<!-- Nom -->
+		<div class="form-group mb-3">
+			{{ form_label(form.lastName, 'admin_users.last_name'|trans, {'label_attr': {'class': 'form-label'}}) }}
+			{{ form_widget(form.lastName, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.lastName) }}
+		</div>
+
+		<!-- Email -->
+		<div class="form-group mb-3">
+			{{ form_label(form.email, 'admin_users.email'|trans, {'label_attr': {'class': 'form-label'}}) }}
+			{{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.email) }}
+		</div>
+
+		<!-- Mot de passe -->
+		<div class="form-group mb-3">
+			{{ form_label(form.password, 'admin_users.password'|trans, {'label_attr': {'class': 'form-label'}}) }}
+			{{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.password) }}
+		</div>
+
+		<!-- Rôles -->
+		<div class="form-group mb-3">
+			{{ form_label(form.roles, 'admin_users.roles'|trans, {'label_attr': {'class': 'form-label'}}) }}
+			{{ form_widget(form.roles, {'attr': {'class': 'form-check'}}) }}
+			{{ form_errors(form.roles) }}
+		</div>
+
+
+		<!-- Date de naissance -->
+		<div class="form-group mb-3">
+			{{ form_label(form.dateOfBirth, 'admin_users.date_of_birth'|trans, {'label_attr': {'class': 'form-label'}}) }}
+			{{ form_widget(form.dateOfBirth, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(form.dateOfBirth) }}
+		</div>
+
+		<!-- Bouton d'enregistrement -->
+		<button type="submit" class="btn btn-primary">{{ 'admin_users.save'|trans }}</button>
+
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

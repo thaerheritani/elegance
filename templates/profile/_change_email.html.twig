@@ -1,14 +1,16 @@
-{% extends 'profile/index.html.twig' %}
-
-{% block profile_content %}
-	<h3>{{ 'Changer l\'adresse e-mail'|trans }}</h3>
-	{{ form_start(changeEmailForm) }}
-	<div class="form-group">
-		{{ form_label(changeEmailForm.newEmail) }}
-		{{ form_widget(changeEmailForm.newEmail, {'attr': {'class': 'form-control'}}) }}
-		{{ form_errors(changeEmailForm.newEmail) }}
+<div class="card">
+	<div class="card-header">
+		{{ 'profile.change_email'|trans }}
 	</div>
+	<div class="card-body">
+		{{ form_start(changeEmailForm) }}
+		<div class="form-group mb-3">
+			{{ form_label(changeEmailForm.newEmail, 'profile.new_email'|trans, {'label_attr': {'class': 'form-label'}}) }}
+			{{ form_widget(changeEmailForm.newEmail, {'attr': {'class': 'form-control'}}) }}
+			{{ form_errors(changeEmailForm.newEmail) }}
+		</div>
 
-	<button type="submit" class="btn btn-primary mt-3">{{ 'Changer l\'adresse e-mail'|trans }}</button>
-	{{ form_end(changeEmailForm) }}
-{% endblock %}
+		<button type="submit" class="btn btn-primary">{{ 'profile.change_email_button'|trans }}</button>
+		{{ form_end(changeEmailForm) }}
+	</div>
+</div>

@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'search.title'|trans }}{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<h2>{{ 'search.title'|trans }}</h2>
+
+		<!-- Search Form -->
+		<div class="card p-4 shadow-sm mb-5 bg-white rounded">
+			{{ form_start(searchForm) }}
+			<div class="row g-3">
+				<div class="col-md-4">
+					{{ form_row(searchForm.productType, {'label': 'search.product_type'|trans}) }}
+				</div>
+				<div class="col-md-4">
+					{{ form_row(searchForm.target, {'label': 'search.target'|trans}) }}
+				</div>
+				<div class="col-md-4">
+					{{ form_row(searchForm.size, {'label': 'search.size'|trans}) }}
+				</div>
+			</div>
+			<div class="mt-4 d-grid">
+				{{ form_row(searchForm.search, {'label': 'search.button'|trans}) }}
+			</div>
+			{{ form_end(searchForm) }}
+		</div>
+
+		<!-- Display results if the search has been submitted -->
+		{% if products is not null %}
+			<h3 class="text-center mt-5">{{ 'search.results'|trans }}</h3>
+
+			{% if products is empty %}
+				<p class="text-center">{{ 'search.no_results'|trans }}</p>
+			{% else %}
+				<div class="row g-4 mt-4">
+					{% for product in products %}
+						<div class="col-md-3">
+							<div class="card h-100 shadow-sm">
+								<img src="{{ asset('images/products/' ~ (product.photos[0].photoPath ?? 'default.png')) }}" class="card-img-top" alt="{{ product.name }}">
+								<div class="card-body">
+									<h5 class="card-title text-truncate">{{ product.name }}</h5>
+									<p class="card-text text-muted">{{ product.description|slice(0, 100) ~ '...' }}</p>
+									<p class="fw-bold">{{ product.getFinalPrice() }} €</p>
+									<a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-outline-primary w-100">{{ 'search.view_product'|trans }}</a>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			{% endif %}
+		{% endif %}
+	</div>
+{% endblock %}

@@ -1,22 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des messages{% endblock %}
+{% block title %}{{ 'message.list'|trans }}{% endblock %}
 
 {% block body %}
     {% include 'shared/nav.html.twig' %}
 
     <div class="container mt-5">
-        <h1>Liste des messages</h1>
+        <h1>{{ 'message.list'|trans }}</h1>
 
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Email</th>
-                <th>Message</th>
-                <th>Statut</th>
-                <th>Actions</th>
+                <th>{{ 'message.id'|trans }}</th>
+                <th>{{ 'message.name'|trans }}</th>
+                <th>{{ 'message.email'|trans }}</th>
+                <th>{{ 'message.content'|trans }}</th>
+                <th>{{ 'message.status'|trans }}</th>
+                <th>{{ 'message.actions'|trans }}</th>
             </tr>
             </thead>
             <tbody>
@@ -28,13 +28,13 @@
                     <td>{{ message.content }}</td>
                     <td>
                         {% if message.isAnswered %}
-                            <span class="badge bg-success">Répondu</span>
+                            <span class="badge bg-success">{{ 'message.answered'|trans }}</span>
                         {% else %}
-                            <span class="badge bg-warning">Non répondu</span>
+                            <span class="badge bg-warning">{{ 'message.not_answered'|trans }}</span>
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('admin_message_reply', {id: message.id}) }}" class="btn btn-primary">Répondre</a>
+                        <a href="{{ path('admin_message_reply', {id: message.id}) }}" class="btn btn-primary">{{ 'message.reply'|trans }}</a>
                     </td>
                 </tr>
             {% endfor %}

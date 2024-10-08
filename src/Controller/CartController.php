@@ -1,19 +1,17 @@
 <?php
 
-// src/Controller/CartController.php
-
 namespace App\Controller;
 
 use App\Entity\Address;
 use App\Form\AddressType;
 use App\Repository\ProductRepository;
+use App\Repository\SizeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CartController extends AbstractController
@@ -44,8 +42,8 @@ class CartController extends AbstractController
         ]);
     }
 
-    #[Route('/checkout', name: 'app_checkout', methods: ['POST'])]
-    public function checkout(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    #[Route('/commande', name: 'app_place_order', methods: ['POST'])]
+    public function placeOrder(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
     {
         $session = $request->getSession();
         $cart = $session->get('cart', []);
@@ -60,41 +58,42 @@ class CartController extends AbstractController
         $addressForm = $this->createForm(AddressType::class, $address);
         $addressForm->handleRequest($request);
 
+        $session->set('address', $address);
+
         if ($addressForm->isSubmitted() && $addressForm->isValid()) {
+            $address->setCustomer($this->getUser());
+
             $entityManager->persist($address);
             $entityManager->flush();
 
-            // Processus de commande
-            $totalPrice = array_sum(array_map(function ($item) {
-                    return $item['price'] * $item['quantity'];
-                }, $cart)) + 4.00;  // Ajouter les frais de livraison
-
-            // Envoi de l'email de confirmation
-            $email = (new Email())
-                ->from('no-reply@votresite.com')
-                ->to($this->getUser()->getEmail())
-                ->subject('Confirmation de votre commande')
-                ->text("Votre commande a été reçue et sera envoyée à l'adresse suivante :\n\n" .
-                    $address->getStreet() . "\n" .
-                    $address->getCity() . ", " . $address->getPostalCode() . "\n" .
-                    $address->getCountry() . "\n\nTotal : " . $totalPrice . "€");
-
-            $mailer->send($email);
-
-            $this->addFlash('success', 'Votre commande a été validée. Un email de confirmation vous a été envoyé.');
-            return $this->redirectToRoute('app_product_index');
+            // Redirection vers la page de paiement Stripe
+            return $this->redirectToRoute('checkout');
         }
 
         return $this->redirectToRoute('app_cart');
     }
 
     #[Route('/panier/ajouter/{id}', name: 'app_cart_add', methods: ['POST'])]
-    public function addToCart(Request $request, ProductRepository $productRepository, $id): JsonResponse
+    public function addToCart(Request $request, ProductRepository $productRepository, SizeRepository $sizeRepository, $id): JsonResponse
     {
         $product = $productRepository->find($id);
 
+        // Get the size from the request body
+        $content = json_decode($request->getContent(), true);
+        $selectedSizeId = $content['size'] ?? null;
+
         if (!$product) {
             return $this->json(['error' => 'Produit non trouvé'], 404);
+        }
+
+        if (!$selectedSizeId) {
+            return $this->json(['error' => 'Taille non sélectionnée'], 400);
+        }
+
+        // Retrieve the selected size
+        $size = $sizeRepository->find($selectedSizeId);
+        if (!$size) {
+            return $this->json(['error' => 'Taille non trouvée'], 404);
         }
 
         $session = $request->getSession();
@@ -102,7 +101,7 @@ class CartController extends AbstractController
 
         $productExists = false;
         foreach ($cart as &$item) {
-            if ($item['id'] == $product->getId()) {
+            if ($item['id'] == $product->getId() && $item['size']['id'] == $size->getId()) {
                 $item['quantity'] += 1;
                 $productExists = true;
                 break;
@@ -116,6 +115,7 @@ class CartController extends AbstractController
                 'price' => $product->getPrice(),
                 'quantity' => 1,
                 'image' => $product->getPhotos()->first() ? $product->getPhotos()->first()->getPhotoPath() : 'default.png',
+                'size' => ['id' => $size->getId(), 'name' => $size->getName()], // Add selected size
             ];
         }
 
@@ -123,6 +123,7 @@ class CartController extends AbstractController
 
         return $this->json(['cartItemCount' => count($cart)]);
     }
+
 
 
     #[Route('/cart/count', name: 'app_cart_count', methods: ['GET'])]
@@ -169,6 +170,4 @@ class CartController extends AbstractController
 
         return new JsonResponse(['success' => true]);
     }
-
 }
-

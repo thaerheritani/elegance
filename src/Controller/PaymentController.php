@@ -63,7 +63,5 @@ class PaymentController extends AbstractController
             'message' => 'Le paiement a été annulé.',
         ]);
     }
-
-
-
 }
+

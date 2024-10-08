@@ -5,6 +5,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\adminUserType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +20,7 @@ class UserCrudController extends AbstractController
     #[Route('/', name: 'admin_manage_users', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
-        return $this->render('admin/user/index.html.twig', [
+        return $this->render('admin/user/new.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
     }
@@ -28,7 +29,7 @@ class UserCrudController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(adminUserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

@@ -1,25 +1,25 @@
 {% block body %}
     <div class="container mt-5">
 
-        <h2 class="mb-4 text-center">{{ 'Nos meilleures offres'|trans }}</h2>
-        <p class="mb-4">{{ 'Ces promos pourraient vous intéresser'|trans }}</p>
+        <h2 class="mb-4 text-center">{{ 'offers.best'|trans }}</h2>
+        <p class="mb-4">{{ 'offers.interested'|trans }}</p>
 
-        <!-- Slider des produits avec réduction -->
+        <!-- Slider of products with discounts -->
         <div id="discountedProductsCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
-                <!-- Affichage d'un produit par item de carrousel -->
+                <!-- Displaying one product per carousel item -->
                 {% for productsChunk in productsWithDiscount|batch(4) %}
                     <div class="carousel-item {% if loop.first %}active{% endif %}">
                         <div class="row">
                             {% for product in productsChunk %}
                                 <div class="col-md-3 mb-4">
                                     <div class="card h-100">
-                                        <img src="{{ asset('images/products/' ~ (product.photos[0].photoPath ?? 'default.png')) }}" class="card-img-top" alt="{{ product.name }}">
+                                        <img src="{{ asset('images/products/' ~ (product.photos[0].photoPath ?? 'default.png')) }}" class="card-img-top img-fluid product-image" alt="{{ product.name }}">
                                         <div class="card-body">
                                             <h5 class="card-title">{{ product.name }}</h5>
                                             <p class="card-text">{{ product.description|slice(0, 100) ~ '...' }}</p>
 
-                                            <!-- Affichage des prix -->
+                                            <!-- Displaying prices -->
                                             {% if product.discount %}
                                                 <p class="card-text">
                                                     <span class="text-danger"><strong>{{ product.getFinalPrice() }} €</strong></span>
@@ -29,9 +29,14 @@
                                                 <p class="card-text"><strong>{{ product.price }} €</strong></p>
                                             {% endif %}
 
-                                            <button class="btn btn-success add-to-cart" data-id="{{ product.id }}">
-                                                <i class="bi bi-cart"></i> Ajouter au panier
+                                            <button class="btn btn-success add-to-cart" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.getFinalPrice() }}">
+                                                <i class="bi bi-cart"></i> {{ 'product.add_to_cart'|trans }}
                                             </button>
+
+                                            <!-- Button for viewing the product -->
+                                            <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-outline-primary mt-2">
+                                                {{ 'product.view'|trans }}
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -41,40 +46,59 @@
                 {% endfor %}
             </div>
 
-            <!-- Contrôles du carrousel -->
+            <!-- Carousel controls -->
             <button class="carousel-control-prev" type="button" data-bs-target="#discountedProductsCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
+                <span class="visually-hidden">{{ 'carousel.prev'|trans }}</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#discountedProductsCarousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
+                <span class="visually-hidden">{{ 'carousel.next'|trans }}</span>
             </button>
         </div>
 
-        <!-- Affichage des autres produits -->
-        <h2 class="text-center">{{ 'Our Products'|trans }}</h2>
+        <!-- Display of other products -->
+        <h2 class="text-center">{{ 'products.title'|trans }}</h2>
         <div class="row">
             {% for product in productsWithoutDiscount %}
                 <div class="col-md-3 col-sm-6 mb-4">
-                    <div class="card product-card h-100" onclick="window.location.href='{{ path('app_product_show', {'id': product.id}) }}';">
-                        <img src="{{ asset('images/products/' ~ (product.photos[0].photoPath ?? 'default.png')) }}" class="card-img-top img-fluid" alt="{{ product.name }}">
+                    <div class="card product-card h-100">
+                        <img src="{{ asset('images/products/' ~ (product.photos[0].photoPath ?? 'default.png')) }}" class="card-img-top img-fluid product-image" alt="{{ product.name }}">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-truncate">{{ product.name }}</h5>
                             <p class="card-text text-muted">{{ product.description|slice(0, 80) ~ '...' }}</p>
-                            <p class="card-text"><strong>{{ 'Price'|trans }}:</strong> {{ product.price }} €</p>
-                            <button class="btn btn-success add-to-cart" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.getFinalPrice() }}">
-                                <i class="bi bi-cart"></i> {{ 'Add to cart'|trans }}
+                            <p class="card-text"><strong>{{ 'product.price'|trans }}:</strong> {{ product.price }} €</p>
+
+                            <!-- Size selection dropdown -->
+                            <div class="d-flex align-items-center">
+                                <label for="size-{{ product.id }}" class="me-2">{{ 'product.size'|trans }}:</label>
+                                <select id="size-{{ product.id }}" class="form-select" data-id="{{ product.id }}">
+                                    {% for size in product.size %}
+                                        <option value="{{ size.id }}">{{ size.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Button for adding to cart -->
+                            <button class="btn btn-success add-to-cart mt-2" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.getFinalPrice() }}">
+                                <i class="bi bi-cart"></i> {{ 'product.add_to_cart'|trans }}
                             </button>
+
+                            <!-- Button for viewing the product -->
+                            <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-outline-primary mt-2">
+                                {{ 'product.view'|trans }}
+                            </a>
                         </div>
                     </div>
                 </div>
             {% else %}
-                <p>{{ 'No products available'|trans }}</p>
+                <p>{{ 'products.no_available'|trans }}</p>
             {% endfor %}
         </div>
 
-        <!-- Rendu de la pagination -->
+
+
+        <!-- Pagination rendering -->
         <div class="d-flex justify-content-center">
             {{ knp_pagination_render(productsWithoutDiscount) }}
         </div>
@@ -82,6 +106,8 @@
     </div>
 
 {% endblock %}
+
+
 {% block javascripts %}
 <script>
     document.addEventListener('turbo:load', function () {
@@ -90,14 +116,24 @@
     });
 
     function attachCartEvents() {
-        // Ajout au panier
         document.querySelectorAll('.add-to-cart').forEach(button => {
             button.addEventListener('click', function () {
                 const productId = this.getAttribute('data-id');
+                const sizeSelect = document.getElementById(`size-${productId}`); // Get the size select input for the product
+                const selectedSize = sizeSelect ? sizeSelect.value : null;
+
+                if (!selectedSize) {
+                    alert('Veuillez sélectionner une taille.'); // Alert the user to select a size
+                    return;
+                }
 
                 fetch(`/panier/ajouter/${productId}`, {
                     method: 'POST',
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ size: selectedSize }) // Send the selected size
                 })
                         .then(response => response.json())
                         .then(data => {
@@ -109,6 +145,7 @@
             });
         });
     }
+
 
     function updateCartCount() {
         // Mettre à jour le badge du panier

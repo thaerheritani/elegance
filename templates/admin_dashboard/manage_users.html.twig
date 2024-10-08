@@ -1,20 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gérer les utilisateurs{% endblock %}
+{% block title %}{{ 'admin_users.title'|trans }}{% endblock %}
 
 {% block body %}
 	{% include 'shared/nav.html.twig' %}
-	<div class="container mt-5">
-		<h1>Gérer les utilisateurs</h1>
-
+	<div class="container mt-5 pt-5">
+		<h1>{{ 'admin_users.title'|trans }}</h1>
+		<div class="mb-3">
+			<a href="{{ path('admin_user_new') }}" class="btn btn-primary">{{ 'admin_users.add_new'|trans }}</a>
+		</div>
 		<table class="table">
 			<thead>
 			<tr>
-				<th>ID</th>
-				<th>Nom</th>
-				<th>Email</th>
-				<th>Rôles</th>
-				<th>Actions</th>
+				<th>{{ 'admin_users.id'|trans }}</th>
+				<th>{{ 'admin_users.name'|trans }}</th>
+				<th>{{ 'admin_users.email'|trans }}</th>
+				<th>{{ 'admin_users.roles'|trans }}</th>
+				<th>{{ 'admin_users.actions'|trans }}</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -25,8 +27,8 @@
 					<td>{{ user.email }}</td>
 					<td>{{ user.roles | join(', ') }}</td>
 					<td>
-						<a href="{{ path('admin_user_edit', {id: user.id}) }}" class="btn btn-warning">Modifier</a>
-						<a href="{{ path('admin_user_delete', {id: user.id}) }}" class="btn btn-danger">Supprimer</a>
+						<a href="{{ path('admin_user_edit', {id: user.id}) }}" class="btn btn-warning">{{ 'admin_users.edit'|trans }}</a>
+						<a href="{{ path('admin_user_delete', {id: user.id}) }}" class="btn btn-danger" onclick="return confirm('{{ 'admin_users.confirm_delete'|trans }}');">{{ 'admin_users.delete'|trans }}</a>
 					</td>
 				</tr>
 			{% endfor %}

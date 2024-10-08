@@ -19,12 +19,8 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, unique: true)]
-    private ?string $slug = null;
-
-
-
-
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $type = null;
 
     /**
      * @var Collection<int, Product>
@@ -53,6 +49,24 @@ class Category
 
         return $this;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string|null $type
+     */
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
+    }
+
+
 
     /**
      * @return Collection<int, Product>

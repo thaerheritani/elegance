@@ -5,49 +5,33 @@
 {% block body %}
 	{% include 'shared/nav.html.twig' %}
 
-	<div class="container mt-5">
+	<div class="container mt-5 pt-5">
 		<div class="row">
 			<div class="col-md-6">
-				<!-- Slider de photos du produit -->
-				<div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-					<div class="carousel-indicators">
-						{% for photo in product.photos %}
-							<button type="button" data-bs-target="#productCarousel" data-bs-slide-to="{{ loop.index0 }}" class="{% if loop.first %}active{% endif %}" aria-current="true" aria-label="{{ 'Slide'|trans }} {{ loop.index }}"></button>
-						{% endfor %}
-					</div>
-					<div class="carousel-inner">
-						{% for photo in product.photos %}
-							<div class="carousel-item {% if loop.first %}active{% endif %}">
-								<img src="{{ asset('images/products/' ~ photo.photoPath) }}" class="d-block w-100" alt="{{ product.name }}">
-							</div>
-						{% endfor %}
-					</div>
-					<!-- Arrows -->
-					<button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-						<span class="visually-hidden">{{ 'Previous'|trans }}</span>
-					</button>
-					<button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-						<span class="carousel-control-next-icon" aria-hidden="true"></span>
-						<span class="visually-hidden">{{ 'Next'|trans }}</span>
-					</button>
+				<div class="large-photo-container mb-3">
+					<img id="mainImage" src="{{ asset('images/products/' ~ product.photos[0].photoPath) }}" class="img-fluid" alt="Main product photo">
+				</div>
+
+				<div class="row">
+					{% for photo in product.photos %}
+						<div class="col-3">
+							<img src="{{ asset('images/products/' ~ photo.photoPath) }}" class="img-thumbnail small-photo" alt="photo miniature {{ loop.index }}" data-big="{{ asset('images/products/' ~ photo.photoPath) }}">
+						</div>
+					{% endfor %}
 				</div>
 			</div>
 
 			<div class="col-md-6">
 				<h1>{{ product.name }}</h1>
 				<p>{{ product.description }}</p>
-				<p><strong>{{ 'Price'|trans }} :</strong> {{ product.price }} €</p>
+				<p><strong>{{ 'product.price'|trans }} :</strong> {{ product.price }} €</p>
 
-				<!-- Formulaire pour laisser un commentaire avec rating -->
-				<h4 class="mt-5">{{ 'Leave a review'|trans }}</h4>
+				<h4 class="mt-5">{{ 'product.leave_review'|trans }}</h4>
 				<div class="card p-4">
 					{{ form_start(reviewForm, {'attr': {'id': 'review-form'}}) }}
-
 					<div class="mb-3">
-						<label for="rating">{{ 'Rating'|trans }}</label>
+						<label for="rating">{{ 'product.rating'|trans }}</label>
 						<div class="rating mb-3">
-							<!-- Utilisation des icônes Bootstrap pour le rating -->
 							<i class="bi bi-star star" data-value="1"></i>
 							<i class="bi bi-star star" data-value="2"></i>
 							<i class="bi bi-star star" data-value="3"></i>
@@ -58,20 +42,18 @@
 					</div>
 
 					<div class="mb-3">
-						{{ form_label(reviewForm.content, 'Comment', {'label_attr': {'class': 'form-label'}}) }}
+						{{ form_label(reviewForm.content, 'product.comment'|trans, {'label_attr': {'class': 'form-label'}}) }}
 						{{ form_widget(reviewForm.content, {'attr': {'class': 'form-control', 'rows': '4'}}) }}
 					</div>
 
-					<button type="submit" class="btn btn-primary">{{ 'Post review'|trans }}</button>
-
+					<button type="submit" class="btn btn-primary">{{ 'product.post_review'|trans }}</button>
 					{{ form_end(reviewForm) }}
 				</div>
 			</div>
 		</div>
 
-		<!-- Liste des commentaires -->
 		<div id="reviews-list" class="mt-5">
-			<h4>{{ 'Customer reviews'|trans }}</h4>
+			<h4>{{ 'product.customer_reviews'|trans }}</h4>
 			{% for review in reviews %}
 				<div class="review border-bottom pb-3 mb-3">
 					<strong>{{ review.customer.firstName }} {{ review.customer.lastName }}</strong>
@@ -85,50 +67,29 @@
 						{% endfor %}
 					</div>
 					<p>{{ review.content }}</p>
-					<small>{{ 'Posted on'|trans }} {{ review.createdAt|date('d/m/Y') }}</small>
+					<small>{{ 'product.posted_on'|trans }} {{ review.createdAt|date('d/m/Y') }}</small>
 				</div>
 			{% else %}
-				<p>{{ 'No reviews yet for this product'|trans }}.</p>
+				<p>{{ 'product.no_reviews'|trans }}</p>
 			{% endfor %}
 		</div>
 	</div>
+{% endblock %}
 
+{% block javascripts %}
+<!-- JavaScript for changing the main image when a thumbnail is clicked -->
 	<script>
-        document.addEventListener('turbo:load', function () {
-            const stars = document.querySelectorAll('.rating .star');
-            const ratingInput = document.querySelector('.rating-value');
+        document.addEventListener('DOMContentLoaded', function () {
+            const mainImage = document.getElementById('mainImage');
+            const smallPhotos = document.querySelectorAll('.small-photo');
 
-            // Ajout des événements sur les étoiles
-            stars.forEach((star, index) => {
-                star.addEventListener('click', () => {
-                    ratingInput.value = index + 1; // Mettre à jour la valeur cachée de l'évaluation
-                    console.log('Rating choisi: ', ratingInput.value); // Vérification
-                    highlightStars(index, true); // Verrouiller les étoiles une fois cliquées
+            // Add event listener to each small photo
+            smallPhotos.forEach(photo => {
+                photo.addEventListener('click', function() {
+                    const newSrc = this.getAttribute('data-big');  // Get the large version of the image
+                    mainImage.src = newSrc;  // Update the main image
                 });
             });
-
-            function highlightStars(index, lock = false) {
-                stars.forEach((star, i) => {
-                    if (i <= index) {
-                        star.classList.add('bi-star-fill');
-                        star.classList.remove('bi-star');
-                    } else {
-                        if (!lock) {
-                            star.classList.add('bi-star');
-                            star.classList.remove('bi-star-fill');
-                        }
-                    }
-                });
-            }
-
-            function resetStars() {
-                const ratingValue = ratingInput ? ratingInput.value : null;
-                if (ratingValue !== null && ratingValue !== "") {
-                    highlightStars(ratingValue - 1, true); // Réinitialise en fonction de la note sélectionnée
-                }
-            }
-
-            resetStars(); // Initialise les étoiles en fonction de la valeur actuelle
         });
 	</script>
 

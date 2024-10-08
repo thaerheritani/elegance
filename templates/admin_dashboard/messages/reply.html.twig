@@ -1,21 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Répondre au message{% endblock %}
+{% block title %}{{ 'message.reply_to'|trans({'name': message.name}) }}{% endblock %}
 
 {% block body %}
 	{% include 'shared/nav.html.twig' %}
 
-	<div class="container mt-5">
-		<h1>Répondre à {{ message.name }}</h1>
+	<div class="container mt-5 pt-5">
+		<h1>{{ 'message.reply_to'|trans({'name': message.name}) }}</h1>
 
 		<form method="post">
 			<div class="mb-3">
-				<label for="reply" class="form-label">Réponse</label>
+				<label for="reply" class="form-label">{{ 'message.response'|trans }}</label>
 				<textarea id="reply" name="reply" class="form-control" rows="5"></textarea>
 			</div>
-			<button type="submit" class="btn btn-primary">Envoyer</button>
+			<button type="submit" class="btn btn-primary">{{ 'message.send'|trans }}</button>
 		</form>
 
-		<a href="{{ path('admin_message_index') }}" class="btn btn-secondary mt-3">Retour</a>
+		<a href="{{ path('admin_message_index') }}" class="btn btn-secondary mt-3">{{ 'message.back'|trans }}</a>
 	</div>
 {% endblock %}

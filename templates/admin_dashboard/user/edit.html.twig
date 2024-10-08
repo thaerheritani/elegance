@@ -1,57 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier l'utilisateur{% endblock %}
+{% block title %}{{ 'user.edit'|trans }}{% endblock %}
 
 {% block body %}
 	{% include 'shared/nav.html.twig' %}
 	<div class="container mt-5">
-		<h1>Modifier l'utilisateur</h1>
+		<h1>{{ 'user.edit'|trans }}</h1>
 
 		{{ form_start(form) }}
 		<div class="mb-3">
-			{{ form_label(form.email, 'Email') }}
+			{{ form_label(form.email, 'user.email'|trans) }}
 			{{ form_widget(form.email, { 'attr': { 'class': 'form-control' } }) }}
 			{{ form_errors(form.email) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_label(form.roles, 'Rôles') }}
+			{{ form_label(form.roles, 'user.roles'|trans) }}
 			{{ form_widget(form.roles) }}
 			{{ form_errors(form.roles) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_label(form.password, 'Mot de passe') }}
+			{{ form_label(form.password, 'user.password'|trans) }}
 			{{ form_widget(form.password, { 'attr': { 'class': 'form-control' } }) }}
 			{{ form_errors(form.password) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_label(form.firstName, 'Prénom') }}
+			{{ form_label(form.firstName, 'user.first_name'|trans) }}
 			{{ form_widget(form.firstName, { 'attr': { 'class': 'form-control' } }) }}
 			{{ form_errors(form.firstName) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_label(form.lastName, 'Nom de famille') }}
+			{{ form_label(form.lastName, 'user.last_name'|trans) }}
 			{{ form_widget(form.lastName, { 'attr': { 'class': 'form-control' } }) }}
 			{{ form_errors(form.lastName) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_label(form.dateOfBirth, 'Date de naissance') }}
+			{{ form_label(form.dateOfBirth, 'user.date_of_birth'|trans) }}
 			{{ form_widget(form.dateOfBirth, { 'attr': { 'class': 'form-control' } }) }}
 			{{ form_errors(form.dateOfBirth) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_label(form.isVerified, 'Vérifié') }}
+			{{ form_label(form.isVerified, 'user.is_verified'|trans) }}
 			{{ form_widget(form.isVerified, { 'attr': { 'class': 'form-control' } }) }}
 			{{ form_errors(form.isVerified) }}
 		</div>
 
-		<button type="submit" class="btn btn-success">Enregistrer les modifications</button>
-		<a href="{{ path('admin_manage_users') }}" class="btn btn-secondary">Annuler</a>
+		<button type="submit" class="btn btn-success">{{ 'user.save'|trans }}</button>
+		<a href="{{ path('admin_manage_users') }}" class="btn btn-secondary">{{ 'user.cancel'|trans }}</a>
 		{{ form_end(form) }}
 	</div>
 	{% include 'shared/footer.html.twig' %}

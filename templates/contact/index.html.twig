@@ -1,25 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Contact{% endblock %}
+{% block title %}{{ 'contact.title'|trans }}{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h1>Contactez-nous</h1>
+    {% include 'shared/nav.html.twig' %}
+
+    <div class="container mt-5 pt-5">
+        <h1>{{ 'contact.heading'|trans }}</h1>
 
         {{ form_start(form) }}
         <div class="mb-3">
-            {{ form_label(form.name) }}
+            {{ form_label(form.name, 'contact.name'|trans) }}
             {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
         </div>
         <div class="mb-3">
-            {{ form_label(form.email) }}
+            {{ form_label(form.email, 'contact.email'|trans) }}
             {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
         </div>
         <div class="mb-3">
-            {{ form_label(form.content) }}
+            {{ form_label(form.content, 'contact.message'|trans) }}
             {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
         </div>
-        <button type="submit" class="btn btn-primary">Envoyer</button>
+        <button type="submit" class="btn btn-primary">{{ 'contact.send'|trans }}</button>
         {{ form_end(form) }}
     </div>
+    {% include 'shared/footer.html.twig' %}
+
 {% endblock %}

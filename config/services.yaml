@@ -6,7 +6,13 @@
 parameters:
     stripe_public_key: '%env(STRIPE_PUBLIC_KEY)%'
     stripe_secret_key: '%env(STRIPE_SECRET_KEY)%'
+    locale: 'en'
 services:
+    App\EventListener\LocaleListener:
+        arguments:
+            $defaultLocale: '%locale%' # Utilise la langue par défaut de votre configuration (config/packages/translation.yaml)
+        tags:
+            - { name: 'kernel.event_subscriber' }
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -23,3 +29,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+framework:
+    default_locale: '%locale%'
+    translator:
+        default_path: '%kernel.project_dir%/translations'
+    session:
+        enabled: true
+        storage_factory_id: session.storage.factory.native

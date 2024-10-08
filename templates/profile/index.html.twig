@@ -1,69 +1,37 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Profile{% endblock %}
+
 {% block body %}
     {% include 'shared/nav.html.twig' %}
 
-    <div class="container mt-5">
+    <div class="container mt-5 pt-5">
         <div class="row">
-            <!-- Sidebar -->
-            <div class="col-lg-3">
-                <div class="list-group" id="profile-sidebar">
-                    <a href="{{ path('app_profile_general_info') }}" class="list-group-item list-group-item-action active">
-                        {{ 'Informations générales'|trans }}
+            <div class="col-md-3">
+                <div class="list-group">
+                    <a href="{{ path('app_profile_general_info') }}" class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'app_profile_general_info' %}active{% endif %}">
+                        General Information
                     </a>
-                    <a href="{{ path('app_profile_change_password') }}" class="list-group-item list-group-item-action">
-                        {{ 'Changer le mot de passe'|trans }}
+                    <a href="{{ path('app_profile_change_password') }}" class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'app_profile_change_password' %}active{% endif %}">
+                        Change Password
                     </a>
-                    <a href="{{ path('app_profile_change_email') }}" class="list-group-item list-group-item-action">
-                        {{ 'Changer l\'adresse e-mail'|trans }}
+                    <a href="{{ path('app_profile_change_email') }}" class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'app_profile_change_email' %}active{% endif %}">
+                        Change Email
                     </a>
-                    <a href="{{ path('app_profile_change_address') }}" class="list-group-item list-group-item-action">
-                        {{ 'Changer l\'adresse'|trans }}
+                    <a href="{{ path('app_profile_change_address') }}" class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'app_profile_change_address' %}active{% endif %}">
+                        Change Address
                     </a>
-                    <a href="{{ path('app_profile_delete_account') }}" class="list-group-item list-group-item-action text-danger">
-                        {{ 'Supprimer le compte'|trans }}
+                    <a href="{{ path('app_profile_delete_account') }}" class="list-group-item list-group-item-action text-danger {% if app.request.attributes.get('_route') == 'app_profile_delete_account' %}active{% endif %}">
+                        Delete Account
                     </a>
                 </div>
             </div>
 
-            <!-- Main Content Area -->
-            <div class="col-lg-9">
-                <div id="profile-content">
-                    <!-- Ce contenu sera remplacé dynamiquement par le JavaScript -->
-                </div>
+            <div class="col-md-9">
+                {{ content|raw }}
             </div>
         </div>
     </div>
+    {% include 'shared/footer.html.twig' %}
 
-    <script>
-        document.addEventListener('turbo:load', function () {
-            const sidebarLinks = document.querySelectorAll('#profile-sidebar a');
-            const profileContent = document.getElementById('profile-content');
-
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const url = this.getAttribute('href');
-
-                    sidebarLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-
-                    fetch(url, {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    })
-                            .then(response => response.text())
-                            .then(html => {
-                                profileContent.innerHTML = html;
-                            })
-                            .catch(error => {
-                                console.error('Erreur:', error);
-                            });
-                });
-            });
-
-            document.querySelector('#profile-sidebar a.active').click();
-        });
-    </script>
 {% endblock %}

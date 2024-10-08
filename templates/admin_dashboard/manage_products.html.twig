@@ -1,22 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gérer les Produits{% endblock %}
+{% block title %}{{ 'admin_products.title'|trans }}{% endblock %}
 
 {% block body %}
 	{% include 'shared/nav.html.twig' %}
-	<div class="container mt-5">
-		<h1>Gérer les Produits</h1>
-		<a href="{{ path('admin_product_new') }}" class="btn btn-primary mb-3">Créer un nouveau produit</a>
+	<div class="container mt-5 pt-5">
+		<h1>{{ 'admin_products.title'|trans }}</h1>
+		<a href="{{ path('admin_product_new') }}" class="btn btn-primary mb-3">{{ 'admin_products.new_product'|trans }}</a>
 
 		<table class="table">
 			<thead>
 			<tr>
-				<th>ID</th>
-				<th>Nom</th>
-				<th>Prix</th>
-				<th>Stock</th>
-				<th>Discount</th>
-				<th>Actions</th>
+				<th>{{ 'admin_products.id'|trans }}</th>
+				<th>{{ 'admin_products.name'|trans }}</th>
+				<th>{{ 'admin_products.price'|trans }}</th>
+				<th>{{ 'admin_products.stock'|trans }}</th>
+				<th>{{ 'admin_products.discount'|trans }}</th>
+				<th>{{ 'admin_products.actions'|trans }}</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -28,11 +28,11 @@
 					<td>{{ product.stock }}</td>
 					<td>{{ product.discount }} %</td>
 					<td>
-						<a href="{{ path('admin_product_show', {id: product.id}) }}" class="btn btn-info">Voir</a>
-						<a href="{{ path('admin_product_edit', {id: product.id}) }}" class="btn btn-warning">Modifier</a>
-						<form method="post" action="{{ path('admin_product_delete', {id: product.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr ?');">
+						<a href="{{ path('admin_product_show', {id: product.id}) }}" class="btn btn-info">{{ 'admin_products.view'|trans }}</a>
+						<a href="{{ path('admin_product_edit', {id: product.id}) }}" class="btn btn-warning">{{ 'admin_products.edit'|trans }}</a>
+						<form method="post" action="{{ path('admin_product_delete', {id: product.id}) }}" style="display:inline-block;" onsubmit="return confirm('{{ 'admin_products.confirm_delete'|trans }}');">
 							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
-							<button class="btn btn-danger">Supprimer</button>
+							<button class="btn btn-danger">{{ 'admin_products.delete'|trans }}</button>
 						</form>
 					</td>
 				</tr>

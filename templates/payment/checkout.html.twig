@@ -2,25 +2,26 @@
 
 {% block body %}
 	<div class="container mt-5">
-		<h2 class="mb-4">Paiement sécurisé</h2>
+		<h2 class="mb-4 text-center">{{ 'payment.secure_payment'|trans }}</h2>
 
 		<div class="row">
 			<div class="col-lg-6 offset-lg-3">
 				<div class="card p-4">
-					<h4 class="mb-3">Montant à payer : {{ total }} €</h4>
+					<h4 class="mb-3">{{ 'payment.amount_to_pay'|trans }} {{ total }} €</h4>
 
 					<form id="payment-form">
 						<div class="mb-3">
-							<div id="card-element"><!-- Stripe Card Element sera inséré ici --></div>
+							<div id="card-element"><!-- Stripe Card Element will be inserted here --></div>
 						</div>
-						<div id="card-errors" class="text-danger mb-3" role="alert"></div>
-						<button id="submit" class="btn btn-primary w-100 mt-3">Payer</button>
+						<div id="card-errors" class="text-danger mb-3" role="alert">{{ 'payment.card_errors'|trans }}</div>
+						<button id="submit" class="btn btn-primary w-100 mt-3">{{ 'payment.pay_button'|trans }}</button>
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
 {% endblock %}
+
 
 {% block javascripts %}
 	<script src="https://js.stripe.com/v3/"></script>
@@ -61,7 +62,7 @@
                         const errorElement = document.getElementById('card-errors');
                         errorElement.textContent = result.error.message;
                     } else {
-                        // Paiement réussi
+                        // Paiement réussi, rediriger vers la page de succès
                         window.location.href = "{{ path('success_url') }}";
                     }
                 });

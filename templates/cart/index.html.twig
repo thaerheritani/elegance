@@ -4,7 +4,7 @@
     {% include 'shared/nav.html.twig' %}
 
     <div class="container mt-5">
-        <h2 class="mb-4">Votre panier</h2>
+        <h2 class="mb-4">{{ 'cart.title'|trans }}</h2>
         <div class="row">
             <div class="col-lg-9">
                 {% for item in cartItems %}
@@ -12,15 +12,16 @@
                         <img src="{{ asset('images/products/' ~ item.image) }}" alt="{{ item.name }}" class="img-fluid" style="max-width: 150px;">
                         <div class="item-info d-flex flex-column flex-grow-1 ms-3">
                             <h5 class="mb-2">{{ item.name }}</h5>
-                            <span class="text-success">En stock</span>
+                            <span class="text-success">{{ 'cart.in_stock'|trans }}</span>
+
                             <div class="d-flex align-items-center mt-3">
-                                <label for="quantity-{{ item.id }}" class="me-2">Qté:</label>
+                                <label for="quantity-{{ item.id }}" class="me-2">{{ 'cart.qty'|trans }}:</label>
                                 <select id="quantity-{{ item.id }}" class="form-select me-3 w-auto quantity-input" data-id="{{ item.id }}" data-price="{{ item.price }}">
                                     {% for i in 1..10 %}
                                         <option value="{{ i }}" {% if item.quantity == i %}selected{% endif %}>{{ i }}</option>
                                     {% endfor %}
                                 </select>
-                                <button class="btn btn-danger remove-item" data-id="{{ item.id }}">Supprimer</button>
+                                <button class="btn btn-danger remove-item" data-id="{{ item.id }}">{{ 'cart.remove_item'|trans }}</button>
                             </div>
                         </div>
                         <div class="item-price text-end ms-auto">
@@ -32,48 +33,48 @@
 
             <div class="col-lg-3">
                 <div class="cart-summary p-4 bg-light border">
-                    <h4 class="mb-3">Résumé de la commande</h4>
+                    <h4 class="mb-3">{{ 'cart.summary'|trans }}</h4>
                     <p class="d-flex justify-content-between">
-                        <span>Produits:</span>
+                        <span>{{ 'cart.product'|trans }}:</span>
                         <span id="total-products">{{ totalProducts }}</span> €
                     </p>
                     <p class="d-flex justify-content-between">
-                        <span>Livraison:</span>
+                        <span>{{ 'cart.shipping_cost'|trans }}:</span>
                         <span id="shipping-cost">{{ shippingCost }}</span> €
                     </p>
                     <hr>
                     <p class="d-flex justify-content-between fw-bold">
-                        <span>Total:</span>
+                        <span>{{ 'cart.total'|trans }}:</span>
                         <span id="total-price">{{ totalPrice }}</span> €
                     </p>
-                    <form action="{{ path('checkout') }}" method="POST" data-turbo="false">
+                    <form action="{{ path('app_place_order') }}" method="POST" data-turbo="false">
                         <div class="card p-4">
-                            <h4 class="mb-3">Adresse de Livraison</h4>
+                            <h4 class="mb-3">{{ 'cart.address'|trans }}</h4>
 
                             {{ form_start(addressForm) }}
 
                             <div class="mb-3">
-                                {{ form_label(addressForm.street, 'Rue', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_label(addressForm.street, 'cart.street'|trans, {'label_attr': {'class': 'form-label'}}) }}
                                 {{ form_widget(addressForm.street, {'attr': {'class': 'form-control'}}) }}
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    {{ form_label(addressForm.city, 'Ville', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_label(addressForm.city, 'cart.city'|trans, {'label_attr': {'class': 'form-label'}}) }}
                                     {{ form_widget(addressForm.city, {'attr': {'class': 'form-control'}}) }}
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    {{ form_label(addressForm.postalCode, 'Code Postal', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_label(addressForm.postalCode, 'cart.postal_code'|trans, {'label_attr': {'class': 'form-label'}}) }}
                                     {{ form_widget(addressForm.postalCode, {'attr': {'class': 'form-control'}}) }}
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                {{ form_label(addressForm.country, 'Pays', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_label(addressForm.country, 'cart.country'|trans, {'label_attr': {'class': 'form-label'}}) }}
                                 {{ form_widget(addressForm.country, {'attr': {'class': 'form-select'}}) }}
                             </div>
 
-                            <button type="submit" class="btn btn-success w-100 mt-3">Valider ma commande</button>
+                            <button type="submit" class="btn btn-success w-100 mt-3">{{ 'cart.validate_order'|trans }}</button>
 
                             {{ form_end(addressForm) }}
                         </div>
@@ -84,6 +85,7 @@
         </div>
     </div>
 {% endblock %}
+
 
 
 {% block javascripts %}

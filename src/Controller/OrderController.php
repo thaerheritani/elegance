@@ -6,14 +6,18 @@ use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\Address;
 use App\Form\AddressType;
+use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class OrderController extends AbstractController
 {
@@ -23,58 +27,42 @@ class OrderController extends AbstractController
         $session = $request->getSession();
         $cart = $session->get('cart', []);
 
-        // Gestion du formulaire d'adresse
-        $address = new Address();
-        $addressForm = $this->createForm(AddressType::class, $address);
-        $addressForm->handleRequest($request);
+        // Initialiser Stripe avec la clé secrète
+        Stripe::setApiKey($this->getParameter('stripe_secret_key'));
 
-        if ($addressForm->isSubmitted() && $addressForm->isValid()) {
-            // Créer une nouvelle commande
-            $order = new Order();
-            $order->setOrderDate(new \DateTime());
-            $order->setStatus('En cours');
-            $order->setCustomer($this->getUser());
-            $total = 0;
+        // Calculer le montant total de la commande (en centimes)
+        $total = 0;
 
-            foreach ($cart as $item) {
-                $product = $productRepository->find($item['id']);
-                if ($product) {
-                    $orderItem = new OrderItem();
-                    $orderItem->setProduct($product);
-                    $orderItem->setQuantity($item['quantity']);
-                    $orderItem->setPrice($product->getPrice());
-
-                    $order->addOrderItem($orderItem);
-                    $total += $product->getPrice() * $item['quantity'];
-                }
-            }
-
-            // Ajouter l'adresse à la commande
-            $order->setTotal($total);
-            $entityManager->persist($order);
-            $address->setCustomer($this->getUser());
-            $entityManager->persist($address);
-            $entityManager->flush();
-
-            // Envoyer un email de confirmation
-            $email = (new Email())
-                ->from('no-reply@boutique.com')
-                ->to($this->getUser()->getEmail())
-                ->subject('Confirmation de commande')
-                ->text("Merci pour votre commande. Total : " . $total . " €. Livraison à : " . $address->getStreet());
-
-            $mailer->send($email);
-
-            // Vider le panier
-            $session->remove('cart');
-
-            return $this->redirectToRoute('success_url');
+        foreach ($cart as $item) {
+            $total += $item['price'] * $item['quantity'];
         }
 
-        return $this->render('order/checkout.html.twig', [
+        $totalInCents = $total * 100; // Montant en centimes pour Stripe
+
+        // Créer un PaymentIntent (Stripe) pour gérer le paiement
+        $paymentIntent = PaymentIntent::create([
+            'amount' => $totalInCents,
+            'currency' => 'eur',
+            'metadata' => ['integration_check' => 'accept_a_payment'],
+        ]);
+
+        // Rendre la page de checkout avec le client_secret du PaymentIntent
+        return $this->render('payment/checkout.html.twig', [
             'cartItems' => $cart,
             'totalPrice' => array_sum(array_column($cart, 'price')),
-            'addressForm' => $addressForm->createView(),
+            'total' => array_sum(array_column($cart, 'price')),
+            'stripe_public_key' => $this->getParameter('stripe_public_key'),
+            'client_secret' => $paymentIntent->client_secret,
+        ]);
+    }
+
+    #[Route('/my-orders', name: 'app_my_orders')]
+    public function myOrders(OrderRepository $orderRepository, UserInterface $user)
+    {
+        $orders = $orderRepository->findBy(['customer' => $user]);
+
+        return $this->render('order/index.html.twig', [
+            'orders' => $orders,
         ]);
     }
 }

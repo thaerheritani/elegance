@@ -4,17 +4,17 @@
 	{% include 'shared/nav.html.twig' %}
 
 	<div class="container mt-5">
-		<h2>Gestion des commandes</h2>
+		<h2>{{ 'order.manage_orders'|trans }}</h2>
 
 		<table class="table">
 			<thead>
 			<tr>
-				<th>ID</th>
-				<th>Date</th>
-				<th>Total</th>
-				<th>Client</th>
-				<th>Statut</th>
-				<th>Actions</th>
+				<th>{{ 'order.id'|trans }}</th>
+				<th>{{ 'order.date'|trans }}</th>
+				<th>{{ 'order.total'|trans }}</th>
+				<th>{{ 'order.customer'|trans }}</th>
+				<th>{{ 'order.status'|trans }}</th>
+				<th>{{ 'order.actions'|trans }}</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -26,12 +26,12 @@
 					<td>{{ order.customer.email }}</td>
 					<td>{{ order.status }}</td>
 					<td>
-						<a href="{{ path('admin_order_status', {id: order.id}) }}" class="btn btn-primary btn-sm">Modifier statut</a>
+						<a href="{{ path('admin_order_status', {id: order.id}) }}" class="btn btn-primary btn-sm">{{ 'order.change_status'|trans }}</a>
 					</td>
 				</tr>
 			{% else %}
 				<tr>
-					<td colspan="6">Aucune commande trouvée</td>
+					<td colspan="6">{{ 'order.no_orders_found'|trans }}</td>
 				</tr>
 			{% endfor %}
 			</tbody>

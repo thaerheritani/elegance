@@ -5,9 +5,9 @@ namespace App\Form;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Size;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -15,7 +15,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class ProductType extends AbstractType
 {
@@ -23,41 +22,62 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom du produit'
+                'label' => 'Nom du produit',
+                'attr' => ['class' => 'form-control']
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'Description'
+                'label' => 'Description',
+                'attr' => ['class' => 'form-control']
             ])
             ->add('price', MoneyType::class, [
                 'label' => 'Prix',
-                'currency' => 'EUR'
+                'currency' => 'EUR',
+                'attr' => ['class' => 'form-control']
             ])
             ->add('stock', IntegerType::class, [
-                'label' => 'Stock'
+                'label' => 'Stock',
+                'attr' => ['class' => 'form-control']
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->where('c.type = :type')
+                        ->setParameter('type', 'product_type');
+                },
                 'choice_label' => 'name',
                 'label' => 'Catégorie',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('targetAudience', EntityType::class, [
+                'class' => Category::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->where('c.type = :type')
+                        ->setParameter('type', 'target');
+                },
+                'choice_label' => 'name',
+                'label' => 'Cible (ex: Hommes, Femmes, Enfants)',
+                'attr' => ['class' => 'form-control']
             ])
             ->add('size', EntityType::class, [
-                'class' => Size::class, // Entité Size
-                'choice_label' => 'name', // Afficher le nom de la taille
-                'multiple' => true, // Permettre la sélection de plusieurs tailles
-                'expanded' => true, // Afficher sous forme de cases à cocher
+                'class' => Size::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true,
                 'label' => 'Tailles disponibles',
+                'attr' => ['class' => 'form-check']
             ])
             ->add('photos', CollectionType::class, [
-                'entry_type' => PhotoType::class,
+                'entry_type' => PhotoType::class,   // PhotoType for individual image fields
                 'entry_options' => ['label' => false],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'prototype' => true,
+                'allow_add' => true,                // Allow adding new images
+                'allow_delete' => true,             // Allow deleting images
+                'by_reference' => false,            // Important for handling collections correctly
+                'prototype' => true,                // Enable prototype for JavaScript to add new fields
                 'attr' => ['class' => 'photo-collection'],
             ]);
     }
-
 
     public function configureOptions(OptionsResolver $resolver): void
     {

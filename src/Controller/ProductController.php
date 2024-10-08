@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Entity\Review;
+use App\Form\ProductSearchType;
 use App\Form\ProductType;
 use App\Form\ReviewType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use App\Repository\SizeRepository;
 use App\Repository\SliderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -72,7 +74,6 @@ class ProductController extends AbstractController
         $reviewForm->handleRequest($request);
 
         if ($reviewForm->isSubmitted() && $reviewForm->isValid()) {
-            dump($review->getRating()); // Vérifier la valeur du rating ici
 
             $review->setProduct($product);
             $review->setCustomer($this->getUser());
@@ -119,4 +120,9 @@ class ProductController extends AbstractController
 
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+
+
 }

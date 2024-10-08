@@ -9,7 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Form\FormError;
 
 class ProfileController extends AbstractController
 {
@@ -26,7 +27,7 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/change-password', name: 'app_profile_change_password')]
-    public function changePassword(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(ChangePasswordFormType::class);
         $form->handleRequest($request);
@@ -36,13 +37,16 @@ class ProfileController extends AbstractController
             $currentPassword = $form->get('currentPassword')->getData();
             $newPassword = $form->get('plainPassword')->getData();
 
-            if ($passwordEncoder->isPasswordValid($user, $currentPassword)) {
-                $user->setPassword($passwordEncoder->encodePassword($user, $newPassword));
+            // Check if the current password is valid
+            if ($passwordHasher->isPasswordValid($user, $currentPassword)) {
+                // Encode and set the new password
+                $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
                 $this->getDoctrine()->getManager()->flush();
 
                 $this->addFlash('success', 'Password changed successfully!');
                 return $this->redirectToRoute('app_profile_general_info');
             } else {
+                // If the current password is incorrect
                 $form->get('currentPassword')->addError(new FormError('Current password is incorrect.'));
             }
         }
@@ -97,8 +101,6 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
-            // Update user's address
-            // Assuming you handle address changes separately in your database
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Address changed successfully!');
