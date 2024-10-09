@@ -57,8 +57,36 @@
                                 <div class="card-body">
                                     <h5 class="card-title text-truncate">{{ product.name }}</h5>
                                     <p class="card-text text-muted">{{ product.description|slice(0, 100) ~ '...' }}</p>
-                                    <p class="fw-bold">{{ product.getFinalPrice() }} €</p>
-                                    <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-outline-primary w-100">{{ 'search.view_product'|trans }}</a>
+
+                                    <!-- Affichage des prix et réduction -->
+                                    {% if product.discount %}
+                                        <p class="card-text">
+                                            <span class="text-danger"><strong>{{ product.getFinalPrice() }} €</strong></span>
+                                            <span class="text-muted text-decoration-line-through">{{ product.price }} €</span>
+                                        </p>
+                                    {% else %}
+                                        <p class="card-text"><strong>{{ product.price }} €</strong></p>
+                                    {% endif %}
+
+                                    <!-- Sélection de la taille -->
+                                    <div class="d-flex align-items-center">
+                                        <label for="size-{{ product.id }}" class="me-2">{{ 'product.size'|trans }}:</label>
+                                        <select id="size-{{ product.id }}" class="form-select" data-id="{{ product.id }}">
+                                            {% for size in product.size %}
+                                                <option value="{{ size.id }}">{{ size.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <!-- Bouton pour ajouter au panier -->
+                                    <button class="btn btn-success add-to-cart mt-2" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.getFinalPrice() }}">
+                                        <i class="bi bi-cart"></i> {{ 'product.add_to_cart'|trans }}
+                                    </button>
+
+                                    <!-- Lien pour afficher les détails du produit -->
+                                    <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-outline-primary mt-2">
+                                        {{ 'product.view'|trans }}
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -68,6 +96,7 @@
                 {% endif %}
             </div>
         {% endif %}
+
     </div>
     {% include 'shared/footer.html.twig' %}
 

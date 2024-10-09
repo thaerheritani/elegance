@@ -14,6 +14,7 @@ admin_dashboard:
   manage_messages: "View and reply to customer messages"
   manage_messages_button: "Manage messages"
   categories: "categories"
+  manage_categories: "manage categories"
 
 admin_orders:
   title: "Manage Orders"

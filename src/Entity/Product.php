@@ -47,19 +47,19 @@ class Product
     /**
      * @var Collection<int, Review>
      */
-    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'product')]
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'product', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $reviews;
 
     /**
      * @var Collection<int, OrderItem>
      */
-    #[ORM\OneToMany(targetEntity: Photo::class, mappedBy: 'product', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'product', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $orderItems;
 
     /**
      * @var Collection<int, Photo>
      */
-    #[ORM\OneToMany(targetEntity: Photo::class, mappedBy: 'product', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Photo::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
     private Collection $photos;
 
     /**

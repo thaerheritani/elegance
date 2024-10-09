@@ -133,6 +133,7 @@ class AdminDashboardController extends AbstractController
         if ($reviewForm->isSubmitted() && $reviewForm->isValid()) {
             $review->setProduct($product);
             $review->setCustomer($this->getUser());
+            $review->setCreatedAt(new \DateTime());
             $entityManager->persist($review);
             $entityManager->flush();
 
@@ -168,6 +169,12 @@ class AdminDashboardController extends AbstractController
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->get('_token'))) {
+            // Manually remove associated photos
+            foreach ($product->getPhotos() as $photo) {
+                $entityManager->remove($photo);
+            }
+
+            // Now remove the product itself
             $entityManager->remove($product);
             $entityManager->flush();
         }

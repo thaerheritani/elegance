@@ -29,6 +29,15 @@
                                                 <p class="card-text"><strong>{{ product.price }} €</strong></p>
                                             {% endif %}
 
+                                            <div class="d-flex align-items-center">
+                                                <label for="size-{{ product.id }}" class="me-2">{{ 'product.size'|trans }}:</label>
+                                                <select id="size-{{ product.id }}" class="form-select" data-id="{{ product.id }}">
+                                                    {% for size in product.size %}
+                                                        <option value="{{ size.id }}">{{ size.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
                                             <button class="btn btn-success add-to-cart" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.getFinalPrice() }}">
                                                 <i class="bi bi-cart"></i> {{ 'product.add_to_cart'|trans }}
                                             </button>

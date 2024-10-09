@@ -20,31 +20,38 @@ class PaymentController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        // Initialiser Stripe avec la clé secrète
-        Stripe::setApiKey($this->getParameter('stripe_secret_key'));
-
-        // Calculer le montant total de la commande (en centimes)
+        // Récupérer le panier de la session
         $cart = $request->getSession()->get('cart', []);
         $total = 0;
+        $shippingCost = 4.00; // Coût fixe de livraison
 
+        // Calculer le total pour les articles dans le panier
         foreach ($cart as $item) {
             $total += $item['price'] * $item['quantity'];
         }
 
-        $totalInCents = $total * 100; // Montant en centimes pour Stripe
+        // Ajouter les frais de livraison
+        $total += $shippingCost;
 
-        // Créer un PaymentIntent (Stripe) pour gérer le paiement
+        // Convertir le total en centimes pour Stripe
+        $totalInCents = $total * 100;
+
+        // Initialiser Stripe avec la clé secrète
+        Stripe::setApiKey($this->getParameter('stripe_secret_key'));
+
+        // Créer un PaymentIntent pour Stripe
         $paymentIntent = PaymentIntent::create([
             'amount' => $totalInCents,
             'currency' => 'eur',
             'metadata' => ['integration_check' => 'accept_a_payment'],
         ]);
 
-        // Rendre la page de checkout avec le client_secret du PaymentIntent
+        // Rendre la page de checkout avec le total correct et le client_secret du PaymentIntent
         return $this->render('payment/checkout.html.twig', [
             'stripe_public_key' => $this->getParameter('stripe_public_key'),
             'client_secret' => $paymentIntent->client_secret,
-            'total' => $total
+            'total' => $total, // Envoyer le total correct à la vue
+            'shippingCost' => $shippingCost, // Envoyer aussi les frais de livraison si nécessaire
         ]);
     }
 
@@ -64,4 +71,3 @@ class PaymentController extends AbstractController
         ]);
     }
 }
-

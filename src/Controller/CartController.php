@@ -22,10 +22,11 @@ class CartController extends AbstractController
         $session = $request->getSession();
         $cart = $session->get('cart', []);
 
-        // Calcul des totaux
+        // Calcul des totaux (pour chaque article, multiplier la quantité par le prix)
         $totalProducts = array_sum(array_map(function ($item) {
             return $item['price'] * $item['quantity'];
         }, $cart));
+
         $shippingCost = 4.00;
         $totalPrice = $totalProducts + $shippingCost;
 
@@ -170,4 +171,29 @@ class CartController extends AbstractController
 
         return new JsonResponse(['success' => true]);
     }
+
+
+    #[Route('/clear-cart', name: 'clear_cart', methods: ['POST'])]
+    public function clearCart(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $session = $request->getSession();
+        $cart = $session->get('cart', []);
+
+        // If your cart is saved in the database, you can remove the cart items here
+        // You can comment this if the cart is purely session-based
+        foreach ($cart as $item) {
+            // Assuming $item is related to some cart entity
+            // $entityManager->remove($item); // Remove from DB
+        }
+
+        $entityManager->flush(); // Only flush if removing DB items
+
+        // Clear the cart from the session
+        $session->remove('cart');
+
+        // Redirect to the success page
+        return $this->redirectToRoute('success_url');
+    }
+
+
 }
